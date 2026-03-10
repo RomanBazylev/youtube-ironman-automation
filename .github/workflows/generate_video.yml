@@ -2,17 +2,21 @@ name: Generate and Publish Video
 
 on:
   schedule:
-    - cron: "0 */6 * * *"
+    - cron: "0 */3 * * *"
   workflow_dispatch:
     inputs:
       video_type:
-        description: "short or normal"
+        description: "auto, short or normal"
         required: false
-        default: ""
+        default: "auto"
       count:
         description: "Number of videos to generate"
         required: false
         default: "1"
+      privacy_status:
+        description: "public, private or unlisted"
+        required: false
+        default: "public"
 
 concurrency:
   group: ${{ github.workflow }}
@@ -55,9 +59,8 @@ jobs:
         run: |
           COUNT="${{ github.event.inputs.count }}"
           TYPE="${{ github.event.inputs.video_type }}"
+          PRIVACY="${{ github.event.inputs.privacy_status }}"
           if [ -z "$COUNT" ]; then COUNT=1; fi
-          if [ -z "$TYPE" ]; then
-            python -m pipeline.generate_video --count "$COUNT"
-          else
-            python -m pipeline.generate_video --video-type "$TYPE" --count "$COUNT"
-          fi
+          if [ -z "$TYPE" ]; then TYPE=auto; fi
+          if [ -z "$PRIVACY" ]; then PRIVACY=public; fi
+          python -m pipeline.generate_video --video-type "$TYPE" --count "$COUNT" --privacy-status "$PRIVACY"

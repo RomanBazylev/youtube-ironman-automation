@@ -66,9 +66,9 @@ def set_thumbnail(video_id: str, thumbnail_path: Path) -> None:
     youtube.thumbnails().set(videoId=video_id, media_body=media).execute()
 
 
-def publish_video(video_id: str) -> None:
+def publish_video(video_id: str, privacy_status: str = "public") -> None:
     youtube = _youtube_client()
     youtube.videos().update(
         part="status",
-        body={"id": video_id, "status": {"privacyStatus": "public"}},
+        body={"id": video_id, "status": {"privacyStatus": privacy_status}},
     ).execute()

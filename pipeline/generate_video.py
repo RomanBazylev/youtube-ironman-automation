@@ -38,10 +38,21 @@ def _pick_music() -> Path | None:
     return random.choice(files) if files else None
 
 
-def generate_single_video(force_type: str | None = None) -> dict:
+def _normalize_privacy_status(value: str) -> str:
+    allowed = {"public", "private", "unlisted"}
+    v = value.strip().lower()
+    if v not in allowed:
+        raise ValueError(f"Invalid privacy status: {value}. Allowed: public/private/unlisted")
+    return v
+
+
+def generate_single_video(force_type: str | None = None, privacy_status: str = "public") -> dict:
     ensure_build_dirs()
 
-    idea = generate_video_idea(force_type=force_type)
+    resolved_video_type = force_type if force_type in {"short", "normal"} else random.choice(["short", "normal"])
+    privacy_status = _normalize_privacy_status(privacy_status)
+
+    idea = generate_video_idea(force_type=resolved_video_type)
     script_pack = generate_script(idea)
     script_text = script_pack["script"]
 
@@ -88,14 +99,15 @@ def generate_single_video(force_type: str | None = None) -> dict:
         description=full_description,
         tags=script_pack.get("tags", []),
         category_id="22",
-        privacy_status="public",
+        privacy_status=privacy_status,
     )
     set_thumbnail(video_id=video_id, thumbnail_path=thumb_path)
-    publish_video(video_id)
+    publish_video(video_id, privacy_status=privacy_status)
 
     result = {
         "video_id": video_id,
         "video_type": idea["video_type"],
+        "privacy_status": privacy_status,
         "title": script_pack["seo_title"],
         "topic": idea["topic"],
         "output": str(output_video),
@@ -109,20 +121,31 @@ def generate_single_video(force_type: str | None = None) -> dict:
     return result
 
 
-def generate_multiple_videos(n: int, force_type: str | None = None) -> list[dict]:
+def generate_multiple_videos(
+    n: int,
+    force_type: str | None = None,
+    privacy_status: str = "public",
+) -> list[dict]:
     results = []
     for _ in range(max(1, n)):
-        results.append(generate_single_video(force_type=force_type))
+        results.append(generate_single_video(force_type=force_type, privacy_status=privacy_status))
     return results
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--video-type", choices=["short", "normal"], default=None)
+    parser.add_argument("--video-type", choices=["auto", "short", "normal"], default="auto")
+    parser.add_argument("--privacy-status", choices=["public", "private", "unlisted"], default="public")
     parser.add_argument("--count", type=int, default=1)
     args = parser.parse_args()
 
-    results = generate_multiple_videos(n=args.count, force_type=args.video_type)
+    forced = None if args.video_type == "auto" else args.video_type
+
+    results = generate_multiple_videos(
+        n=args.count,
+        force_type=forced,
+        privacy_status=args.privacy_status,
+    )
     print(json.dumps(results, indent=2))
 
 

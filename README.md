@@ -21,7 +21,7 @@ Pipeline:
 2. generate script + SEO
 3. split script into scenes
 4. download stock videos (Pexels + Pixabay)
-5. generate voiceover (edge-tts)
+5. generate voiceover (edge-tts with gTTS fallback)
 6. generate impact captions
 7. assemble video (FFmpeg)
 8. generate thumbnail
@@ -76,19 +76,21 @@ ai-youtube-factory/
 ## Запуск
 
 Автоматически:
-- cron: каждые 6 часов.
+- cron: каждые 3 часа.
+- по умолчанию: 1 видео за запуск, тип `auto` (случайно short или normal), privacy `public`.
 
 Вручную:
 - Actions -> Generate and Publish Video -> Run workflow.
 - Можно задать:
-  - video_type: short или normal
+  - video_type: auto, short или normal
   - count: число видео
+  - privacy_status: public, private или unlisted
 
 ## Массовая генерация
 
 `pipeline/generate_video.py` поддерживает:
 - `generate_multiple_videos(n)`
-- CLI: `python -m pipeline.generate_video --count 3`
+- CLI: `python -m pipeline.generate_video --video-type auto --privacy-status private --count 3`
 
 ## Оптимизация CI
 
