@@ -40,6 +40,33 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Preflight secrets check
+        run: |
+          set -e
+          REQUIRED_VARS=(
+            GROQ_API_KEY
+            PEXELS_API_KEY
+            PIXABAY_API_KEY
+            YOUTUBE_CLIENT_ID
+            YOUTUBE_CLIENT_SECRET
+            YOUTUBE_REFRESH_TOKEN
+          )
+
+          MISSING=0
+          for VAR_NAME in "${REQUIRED_VARS[@]}"; do
+            if [ -z "${!VAR_NAME}" ]; then
+              echo "[ERROR] Missing required secret: ${VAR_NAME}"
+              MISSING=1
+            fi
+          done
+
+          if [ "$MISSING" -ne 0 ]; then
+            echo "[FATAL] Required secrets are missing. Add them in GitHub Settings -> Secrets and variables -> Actions."
+            exit 1
+          fi
+
+          echo "[OK] Required secrets are configured."
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
