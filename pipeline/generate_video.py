@@ -52,73 +52,82 @@ def generate_single_video(force_type: str | None = None, privacy_status: str = "
     resolved_video_type = force_type if force_type in {"short", "normal"} else random.choice(["short", "normal"])
     privacy_status = _normalize_privacy_status(privacy_status)
 
-    idea = generate_video_idea(force_type=resolved_video_type)
-    script_pack = generate_script(idea)
-    script_text = script_pack["script"]
+    try:
+        idea = generate_video_idea(force_type=resolved_video_type)
+        script_pack = generate_script(idea)
+        script_text = script_pack["script"]
 
-    scenes = generate_scene_prompts(script=script_text, video_type=idea["video_type"])
-    captions = generate_captions(scenes)
-    for i, cap in enumerate(captions):
-        scenes[i]["caption_text"] = cap
+        scenes = generate_scene_prompts(script=script_text, video_type=idea["video_type"])
+        captions = generate_captions(scenes)
+        for i, cap in enumerate(captions):
+            scenes[i]["caption_text"] = cap
 
-    clips = download_clips_for_scenes(
-        scenes=scenes,
-        output_dir=TEMP_DIR / "clips",
-        video_type=idea["video_type"],
-    )
+        clips = download_clips_for_scenes(
+            scenes=scenes,
+            output_dir=TEMP_DIR / "clips",
+            video_type=idea["video_type"],
+        )
 
-    voiceover_path = TEMP_DIR / "voiceover.mp3"
-    generate_voiceover(script_text, voiceover_path)
+        voiceover_path = TEMP_DIR / "voiceover.mp3"
+        generate_voiceover(script_text, voiceover_path)
 
-    spec = VIDEO_SPECS[idea["video_type"]]
-    ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
-    output_video = OUTPUT_DIR / f"{idea['video_type']}_{ts}.mp4"
+        spec = VIDEO_SPECS[idea["video_type"]]
+        ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
+        output_video = OUTPUT_DIR / f"{idea['video_type']}_{ts}.mp4"
 
-    assemble_video(
-        clips=clips,
-        scenes=scenes,
-        voiceover_path=voiceover_path,
-        music_path=_pick_music(),
-        output_path=output_video,
-        temp_dir=TEMP_DIR / "render",
-        width=spec.width,
-        height=spec.height,
-        fps=spec.fps,
-    )
+        assemble_video(
+            clips=clips,
+            scenes=scenes,
+            voiceover_path=voiceover_path,
+            music_path=_pick_music(),
+            output_path=output_video,
+            temp_dir=TEMP_DIR / "render",
+            width=spec.width,
+            height=spec.height,
+            fps=spec.fps,
+        )
 
-    thumb_path = THUMB_DIR / f"thumb_{ts}.jpg"
-    generate_thumbnail(output_video, thumb_path)
+        thumb_path = THUMB_DIR / f"thumb_{ts}.jpg"
+        generate_thumbnail(output_video, thumb_path)
 
-    full_description = (
-        f"{script_pack['seo_description']}\n\n"
-        "#discipline #selfimprovement #stoicism #mindset #success"
-    )
-    video_id = upload_video(
-        video_path=output_video,
-        title=script_pack["seo_title"],
-        description=full_description,
-        tags=script_pack.get("tags", []),
-        category_id="22",
-        privacy_status=privacy_status,
-    )
-    set_thumbnail(video_id=video_id, thumbnail_path=thumb_path)
-    publish_video(video_id, privacy_status=privacy_status)
+        full_description = (
+            f"{script_pack['seo_description']}\n\n"
+            "#discipline #selfimprovement #stoicism #mindset #success"
+        )
+        video_id = upload_video(
+            video_path=output_video,
+            title=script_pack["seo_title"],
+            description=full_description,
+            tags=script_pack.get("tags", []),
+            category_id="22",
+            privacy_status=privacy_status,
+        )
 
-    result = {
-        "video_id": video_id,
-        "video_type": idea["video_type"],
-        "privacy_status": privacy_status,
-        "title": script_pack["seo_title"],
-        "topic": idea["topic"],
-        "output": str(output_video),
-    }
+        try:
+            set_thumbnail(video_id=video_id, thumbnail_path=thumb_path)
+        except Exception as e:
+            print(f"[WARN] Thumbnail step failed, continuing: {e}")
 
-    (BUILD_DIR / "last_result.json").write_text(json.dumps(result, indent=2), encoding="utf-8")
+        try:
+            publish_video(video_id, privacy_status=privacy_status)
+        except Exception as e:
+            print(f"[WARN] Publish status update failed, continuing: {e}")
 
-    # Clean transient files to reduce artifact size and CI runtime.
-    if TEMP_DIR.exists():
-        shutil.rmtree(TEMP_DIR)
-    return result
+        result = {
+            "video_id": video_id,
+            "video_type": idea["video_type"],
+            "privacy_status": privacy_status,
+            "title": script_pack["seo_title"],
+            "topic": idea["topic"],
+            "output": str(output_video),
+        }
+
+        (BUILD_DIR / "last_result.json").write_text(json.dumps(result, indent=2), encoding="utf-8")
+        return result
+    finally:
+        # Clean transient files to reduce artifact size and CI runtime.
+        if TEMP_DIR.exists():
+            shutil.rmtree(TEMP_DIR)
 
 
 def generate_multiple_videos(

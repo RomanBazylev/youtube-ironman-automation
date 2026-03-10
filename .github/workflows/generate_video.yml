@@ -44,9 +44,6 @@ jobs:
         run: |
           set -e
           REQUIRED_VARS=(
-            GROQ_API_KEY
-            PEXELS_API_KEY
-            PIXABAY_API_KEY
             YOUTUBE_CLIENT_ID
             YOUTUBE_CLIENT_SECRET
             YOUTUBE_REFRESH_TOKEN
@@ -62,6 +59,16 @@ jobs:
 
           if [ "$MISSING" -ne 0 ]; then
             echo "[FATAL] Required secrets are missing. Add them in GitHub Settings -> Secrets and variables -> Actions."
+            exit 1
+          fi
+
+          if [ -z "$GROQ_API_KEY" ] && [ -z "$OPENAI_API_KEY" ]; then
+            echo "[FATAL] Configure at least one LLM key: GROQ_API_KEY or OPENAI_API_KEY"
+            exit 1
+          fi
+
+          if [ -z "$PEXELS_API_KEY" ] && [ -z "$PIXABAY_API_KEY" ]; then
+            echo "[FATAL] Configure at least one stock API key: PEXELS_API_KEY or PIXABAY_API_KEY"
             exit 1
           fi
 

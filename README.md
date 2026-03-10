@@ -66,6 +66,10 @@ ai-youtube-factory/
 Опционально (fallback):
 - OPENAI_API_KEY
 
+Минимум для запуска:
+- хотя бы один LLM ключ: `GROQ_API_KEY` или `OPENAI_API_KEY`
+- хотя бы один stock ключ: `PEXELS_API_KEY` или `PIXABAY_API_KEY`
+
 ## Настройка YouTube API
 
 1. В Google Cloud включи YouTube Data API v3.

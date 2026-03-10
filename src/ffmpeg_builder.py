@@ -1,4 +1,5 @@
 import json
+import re
 import subprocess
 from pathlib import Path
 from typing import Dict, List
@@ -59,6 +60,17 @@ def _prepare_clip(
     )
 
 
+def _safe_drawtext_text(raw: str) -> str:
+    # Keep only drawtext-safe characters to avoid filter parser errors in CI.
+    text = raw.replace("\\", " ")
+    text = text.replace("\n", " ")
+    text = text.replace(":", " - ").replace(";", " ").replace(",", " ")
+    text = text.replace("'", "").replace('"', "")
+    text = re.sub(r"[^A-Za-z0-9 .,!?\-]", " ", text)
+    text = re.sub(r"\s+", " ", text).strip()
+    return text or "STAY HARD"
+
+
 def assemble_video(
     clips: List[Path],
     scenes: List[Dict[str, str | int]],
@@ -115,7 +127,7 @@ def assemble_video(
     for scene in scenes:
         dur = float(scene["duration"])
         end = start + dur
-        txt = str(scene["caption_text"]).replace("'", "\\'")
+        txt = _safe_drawtext_text(str(scene["caption_text"]))
         draw_filters.append(
             "drawtext="
             f"text='{txt}':"

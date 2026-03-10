@@ -1,4 +1,5 @@
 import random
+import time
 from pathlib import Path
 from typing import Dict, List
 
@@ -10,17 +11,21 @@ from config.settings import PEXELS_API_KEY, PIXABAY_API_KEY
 def _search_pexels(query: str, per_page: int = 10, orientation: str = "portrait") -> List[Dict]:
     if not PEXELS_API_KEY:
         return []
-    response = requests.get(
-        "https://api.pexels.com/videos/search",
-        headers={"Authorization": PEXELS_API_KEY},
-        params={
-            "query": query,
-            "per_page": per_page,
-            "orientation": orientation,
-        },
-        timeout=60,
-    )
-    response.raise_for_status()
+    try:
+        response = requests.get(
+            "https://api.pexels.com/videos/search",
+            headers={"Authorization": PEXELS_API_KEY},
+            params={
+                "query": query,
+                "per_page": per_page,
+                "orientation": orientation,
+            },
+            timeout=60,
+        )
+        response.raise_for_status()
+    except requests.RequestException as e:
+        print(f"[STOCK] Pexels request failed for '{query}': {e}")
+        return []
     videos = response.json().get("videos", [])
     normalized: List[Dict] = []
     for v in videos:
@@ -51,17 +56,21 @@ def _pick_pexels_file(video: Dict) -> str | None:
 def _search_pixabay(query: str, per_page: int = 10, orientation: str = "portrait") -> List[Dict]:
     if not PIXABAY_API_KEY:
         return []
-    response = requests.get(
-        "https://pixabay.com/api/videos/",
-        params={
-            "key": PIXABAY_API_KEY,
-            "q": query,
-            "per_page": per_page,
-            "safesearch": "true",
-        },
-        timeout=60,
-    )
-    response.raise_for_status()
+    try:
+        response = requests.get(
+            "https://pixabay.com/api/videos/",
+            params={
+                "key": PIXABAY_API_KEY,
+                "q": query,
+                "per_page": per_page,
+                "safesearch": "true",
+            },
+            timeout=60,
+        )
+        response.raise_for_status()
+    except requests.RequestException as e:
+        print(f"[STOCK] Pixabay request failed for '{query}': {e}")
+        return []
     hits = response.json().get("hits", [])
 
     normalized: List[Dict] = []
@@ -107,13 +116,23 @@ def search_videos(query: str, per_page: int = 10, orientation: str = "portrait")
 
 def download_video(url: str, output_path: Path) -> Path:
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    with requests.get(url, stream=True, timeout=120) as r:
-        r.raise_for_status()
-        with output_path.open("wb") as f:
-            for chunk in r.iter_content(chunk_size=8192):
-                if chunk:
-                    f.write(chunk)
-    return output_path
+    last_error: Exception | None = None
+    for attempt in range(1, 4):
+        try:
+            with requests.get(url, stream=True, timeout=120) as r:
+                r.raise_for_status()
+                with output_path.open("wb") as f:
+                    for chunk in r.iter_content(chunk_size=8192):
+                        if chunk:
+                            f.write(chunk)
+            if output_path.exists() and output_path.stat().st_size > 1024:
+                return output_path
+            raise RuntimeError("Downloaded clip is empty or too small")
+        except Exception as e:
+            last_error = e
+            print(f"[STOCK] Download attempt {attempt} failed: {e}")
+            time.sleep(attempt)
+    raise RuntimeError(f"Failed to download clip after retries: {last_error}")
 
 
 def download_clips_for_scenes(
@@ -128,9 +147,12 @@ def download_clips_for_scenes(
     used_urls: set[str] = set()
     for i, scene in enumerate(scenes, start=1):
         query = str(scene["visual_keyword"])
-        result = search_videos(query=query, per_page=12, orientation=orientation)
-        if not result:
-            result = search_videos(query="motivation", per_page=12, orientation=orientation)
+        queries = [query, "discipline", "motivation", "success mindset"]
+        result: List[Dict] = []
+        for q in queries:
+            result = search_videos(query=q, per_page=12, orientation=orientation)
+            if result:
+                break
         if not result:
             raise RuntimeError("No clips returned from Pexels/Pixabay")
 

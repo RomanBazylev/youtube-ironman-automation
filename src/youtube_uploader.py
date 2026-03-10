@@ -1,3 +1,4 @@
+import time
 from pathlib import Path
 from typing import List
 
@@ -53,22 +54,44 @@ def upload_video(
     media = MediaFileUpload(str(video_path), chunksize=-1, resumable=True)
     request = youtube.videos().insert(part="snippet,status", body=body, media_body=media)
 
-    response = None
-    while response is None:
-        _, response = request.next_chunk()
+    last_error: Exception | None = None
+    for attempt in range(1, 4):
+        try:
+            response = None
+            while response is None:
+                _, response = request.next_chunk()
+            return response["id"]
+        except Exception as e:
+            last_error = e
+            print(f"[YOUTUBE] Upload attempt {attempt} failed: {e}")
+            time.sleep(attempt * 3)
 
-    return response["id"]
+    raise RuntimeError(f"YouTube upload failed after retries: {last_error}")
 
 
 def set_thumbnail(video_id: str, thumbnail_path: Path) -> None:
     youtube = _youtube_client()
     media = MediaFileUpload(str(thumbnail_path))
-    youtube.thumbnails().set(videoId=video_id, media_body=media).execute()
+    for attempt in range(1, 4):
+        try:
+            youtube.thumbnails().set(videoId=video_id, media_body=media).execute()
+            return
+        except Exception as e:
+            print(f"[YOUTUBE] Thumbnail attempt {attempt} failed: {e}")
+            time.sleep(attempt * 2)
+    raise RuntimeError("Failed to set thumbnail after retries")
 
 
 def publish_video(video_id: str, privacy_status: str = "public") -> None:
     youtube = _youtube_client()
-    youtube.videos().update(
-        part="status",
-        body={"id": video_id, "status": {"privacyStatus": privacy_status}},
-    ).execute()
+    for attempt in range(1, 4):
+        try:
+            youtube.videos().update(
+                part="status",
+                body={"id": video_id, "status": {"privacyStatus": privacy_status}},
+            ).execute()
+            return
+        except Exception as e:
+            print(f"[YOUTUBE] Publish attempt {attempt} failed: {e}")
+            time.sleep(attempt * 2)
+    raise RuntimeError("Failed to update publish status after retries")
