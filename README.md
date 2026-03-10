@@ -110,6 +110,12 @@ ai-youtube-factory/
 - Если edge-tts временно недоступен, включается fallback на gTTS.
 - Для long видео субтитры автоматически короче и с `fix_bounds`, чтобы не выходили за кадр.
 - Если в `assets/music` нет треков, добавляется мягкий fallback audio bed, чтобы ролик не был без фона.
+- Голос проходит loudness-нормализацию, музыка автоматически ducked под voice (sidechain compress).
+
+## Релевантность стоков
+
+- Включен blacklist нерелевантных категорий (makeup/beauty/skincare/cosmetics и т.д.).
+- Поиск и ранжирование клипов выполняется с male-priority (man/male/men/masculine).
 
 Для лучшего результата добавьте 1-2 royalty-free трека в `assets/music` (`.mp3/.wav/.m4a`).
 

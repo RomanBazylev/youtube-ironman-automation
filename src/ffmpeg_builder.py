@@ -162,9 +162,10 @@ def assemble_video(
                 "-filter_complex",
                 (
                     f"[0:v]{vf}[v];"
-                    "[1:a]volume=1.0[va];"
-                    "[2:a]volume=0.14[ma];"
-                    "[va][ma]amix=inputs=2:duration=first[a]"
+                    "[1:a]loudnorm=I=-16:LRA=11:TP=-1.5,acompressor=threshold=-18dB:ratio=2.5:attack=5:release=120[va];"
+                    "[2:a]highpass=f=80,lowpass=f=14000,volume=0.16[ma];"
+                    "[ma][va]sidechaincompress=threshold=0.03:ratio=10:attack=15:release=250[ducked];"
+                    "[va][ducked]amix=inputs=2:duration=first:normalize=0[a]"
                 ),
                 "-map",
                 "[v]",
@@ -180,9 +181,9 @@ def assemble_video(
                 "-filter_complex",
                 (
                     f"[0:v]{vf}[v];"
-                    "[1:a]volume=1.0[va];"
+                    "[1:a]loudnorm=I=-16:LRA=11:TP=-1.5,acompressor=threshold=-18dB:ratio=2.5:attack=5:release=120[va];"
                     "[2:a]lowpass=f=1800,highpass=f=90,volume=0.07[ba];"
-                    "[va][ba]amix=inputs=2:duration=first[a]"
+                    "[va][ba]amix=inputs=2:duration=first:normalize=0[a]"
                 ),
                 "-map",
                 "[v]",

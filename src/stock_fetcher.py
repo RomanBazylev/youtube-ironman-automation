@@ -9,6 +9,20 @@ import requests
 from config.settings import PEXELS_API_KEY, PIXABAY_API_KEY
 
 
+BLACKLIST_TERMS = {
+    "makeup",
+    "beauty",
+    "skincare",
+    "lipstick",
+    "nails",
+    "cosmetics",
+    "salon",
+    "manicure",
+    "fashion model",
+}
+MALE_PRIORITY_TERMS = {"man", "male", "men", "masculine", "gentleman", "businessman"}
+
+
 def _normalize_query(text: str) -> str:
     q = re.sub(r"[^a-zA-Z0-9 ]", " ", text).strip().lower()
     q = re.sub(r"\s+", " ", q)
@@ -35,6 +49,16 @@ def _male_query_variants(base_query: str) -> List[str]:
             seen.add(v)
             deduped.append(v)
     return deduped
+
+
+def _contains_blacklist(text: str) -> bool:
+    t = _normalize_query(text)
+    return any(term in t for term in BLACKLIST_TERMS)
+
+
+def _male_priority_score(text: str) -> int:
+    t = _normalize_query(text)
+    return sum(1 for term in MALE_PRIORITY_TERMS if term in t)
 
 
 def _search_pexels(query: str, per_page: int = 10, orientation: str = "portrait") -> List[Dict]:
@@ -66,6 +90,14 @@ def _search_pexels(query: str, per_page: int = 10, orientation: str = "portrait"
                 "provider": "pexels",
                 "id": f"pexels_{v.get('id')}",
                 "url": link,
+                "searchable_text": " ".join(
+                    [
+                        str(v.get("url", "")),
+                        str(v.get("id", "")),
+                        str(v.get("user", {}).get("name", "")),
+                        query,
+                    ]
+                ),
             }
         )
     return normalized
@@ -139,6 +171,13 @@ def _search_pixabay(query: str, per_page: int = 10, orientation: str = "portrait
                 "provider": "pixabay",
                 "id": f"pixabay_{hit.get('id')}",
                 "url": url,
+                "searchable_text": " ".join(
+                    [
+                        str(hit.get("tags", "")),
+                        str(hit.get("id", "")),
+                        query,
+                    ]
+                ),
             }
         )
     return normalized
@@ -147,7 +186,8 @@ def _search_pixabay(query: str, per_page: int = 10, orientation: str = "portrait
 def search_videos(query: str, per_page: int = 10, orientation: str = "portrait") -> List[Dict]:
     pexels = _search_pexels(query=query, per_page=per_page, orientation=orientation)
     pixabay = _search_pixabay(query=query, per_page=per_page, orientation=orientation)
-    combined = pexels + pixabay
+    combined = [item for item in (pexels + pixabay) if not _contains_blacklist(str(item.get("searchable_text", "")))]
+    combined.sort(key=lambda item: _male_priority_score(str(item.get("searchable_text", ""))), reverse=True)
     random.shuffle(combined)
     return combined
 
