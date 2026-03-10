@@ -2,8 +2,14 @@ import argparse
 import json
 import random
 import shutil
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
+
+# Allow running as file path (python pipeline/generate_video.py) in CI/local.
+ROOT_DIR = Path(__file__).resolve().parents[1]
+if str(ROOT_DIR) not in sys.path:
+    sys.path.insert(0, str(ROOT_DIR))
 
 from config.settings import (
     BUILD_DIR,

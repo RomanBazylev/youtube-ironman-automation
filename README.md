@@ -88,7 +88,7 @@ ai-youtube-factory/
 
 `pipeline/generate_video.py` поддерживает:
 - `generate_multiple_videos(n)`
-- CLI: `python pipeline/generate_video.py --count 3`
+- CLI: `python -m pipeline.generate_video --count 3`
 
 ## Оптимизация CI
 

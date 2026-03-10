@@ -57,7 +57,7 @@ jobs:
           TYPE="${{ github.event.inputs.video_type }}"
           if [ -z "$COUNT" ]; then COUNT=1; fi
           if [ -z "$TYPE" ]; then
-            python pipeline/generate_video.py --count "$COUNT"
+            python -m pipeline.generate_video --count "$COUNT"
           else
-            python pipeline/generate_video.py --video-type "$TYPE" --count "$COUNT"
+            python -m pipeline.generate_video --video-type "$TYPE" --count "$COUNT"
           fi
