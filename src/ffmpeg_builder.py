@@ -121,6 +121,10 @@ def assemble_video(
     clip_dur = _probe_duration(silent_video)
     final_duration = min(max(clip_dur, voice_dur), 185.0)
 
+    is_short = height > width
+    font_size = 54 if is_short else 38
+    caption_y = "h*0.78" if is_short else "h*0.82"
+
     # Build caption drawtext chain with per-scene timing.
     draw_filters = []
     start = 0.0
@@ -131,8 +135,11 @@ def assemble_video(
         draw_filters.append(
             "drawtext="
             f"text='{txt}':"
-            "fontcolor=white:fontsize=56:borderw=2:bordercolor=black:"
-            "x=(w-text_w)/2:y=h*0.78:"
+            f"fontcolor=white:fontsize={font_size}:borderw=2:bordercolor=black:"
+            "box=1:boxcolor=black@0.28:boxborderw=14:"
+            "x=(w-text_w)/2:"
+            f"y={caption_y}:"
+            "fix_bounds=1:"
             f"enable='between(t,{start:.2f},{end:.2f})'"
         )
         start = end
@@ -156,7 +163,7 @@ def assemble_video(
                 (
                     f"[0:v]{vf}[v];"
                     "[1:a]volume=1.0[va];"
-                    "[2:a]volume=0.18[ma];"
+                    "[2:a]volume=0.14[ma];"
                     "[va][ma]amix=inputs=2:duration=first[a]"
                 ),
                 "-map",
@@ -166,14 +173,21 @@ def assemble_video(
             ]
         )
     else:
+        # Fallback audio bed so videos are not dry when no music file is provided.
+        cmd.extend(["-f", "lavfi", "-t", f"{final_duration:.2f}", "-i", "anoisesrc=color=pink:amplitude=0.015"])
         cmd.extend(
             [
                 "-filter_complex",
-                f"[0:v]{vf}[v]",
+                (
+                    f"[0:v]{vf}[v];"
+                    "[1:a]volume=1.0[va];"
+                    "[2:a]lowpass=f=1800,highpass=f=90,volume=0.07[ba];"
+                    "[va][ba]amix=inputs=2:duration=first[a]"
+                ),
                 "-map",
                 "[v]",
                 "-map",
-                "1:a",
+                "[a]",
             ]
         )
 

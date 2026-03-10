@@ -34,8 +34,9 @@ def generate_scene_prompts(script: str, video_type: str) -> List[Dict[str, str |
     for i in range(scene_count):
         text = lines[i % len(lines)]
         clean_caption = re.sub(r"[^A-Za-z0-9 '\-]", "", text).strip()
-        if len(clean_caption) > 42:
-            clean_caption = clean_caption[:42].rstrip() + "..."
+        max_caption_len = 28 if video_type == "normal" else 36
+        if len(clean_caption) > max_caption_len:
+            clean_caption = clean_caption[:max_caption_len].rstrip() + "..."
         scenes.append(
             {
                 "visual_keyword": visuals[i % len(visuals)],

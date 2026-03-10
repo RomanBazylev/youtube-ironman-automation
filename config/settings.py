@@ -62,7 +62,7 @@ DEFAULT_TIMEZONE = "UTC"
 
 # Keep CI fast and cheap.
 FFMPEG_PRESET = "veryfast"
-FFMPEG_CRF = "23"
+FFMPEG_CRF = "21"
 AUDIO_BITRATE = "128k"
 
 

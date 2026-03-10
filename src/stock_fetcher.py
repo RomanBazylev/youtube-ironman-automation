@@ -46,7 +46,8 @@ def _pick_pexels_file(video: Dict) -> str | None:
     files = video.get("video_files", [])
     if not files:
         return None
-    files = sorted(files, key=lambda f: f.get("width", 0))
+    # Prefer higher quality mp4 assets for cleaner output.
+    files = sorted(files, key=lambda f: f.get("width", 0), reverse=True)
     for f in files:
         if f.get("file_type") == "video/mp4":
             return f.get("link")
@@ -76,23 +77,31 @@ def _search_pixabay(query: str, per_page: int = 10, orientation: str = "portrait
     normalized: List[Dict] = []
     for hit in hits:
         video_variants = hit.get("videos", {})
-        file_obj = (
-            video_variants.get("medium")
-            or video_variants.get("small")
-            or video_variants.get("large")
-            or video_variants.get("tiny")
-        )
-        if not file_obj:
+        candidates = [
+            video_variants.get("large"),
+            video_variants.get("medium"),
+            video_variants.get("small"),
+            video_variants.get("tiny"),
+        ]
+        selected = None
+        for file_obj in candidates:
+            if not file_obj:
+                continue
+
+            width = int(file_obj.get("width", 0) or 0)
+            height = int(file_obj.get("height", 0) or 0)
+            if orientation == "portrait" and width >= height:
+                continue
+            if orientation == "landscape" and height > width:
+                continue
+
+            selected = file_obj
+            break
+
+        if not selected:
             continue
 
-        width = int(file_obj.get("width", 0) or 0)
-        height = int(file_obj.get("height", 0) or 0)
-        if orientation == "portrait" and width >= height:
-            continue
-        if orientation == "landscape" and height > width:
-            continue
-
-        url = file_obj.get("url")
+        url = selected.get("url")
         if not url:
             continue
 

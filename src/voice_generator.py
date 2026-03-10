@@ -6,15 +6,15 @@ import edge_tts
 from gtts import gTTS
 
 
-VOICES = [
-    "en-US-GuyNeural",
-    "en-US-BrianMultilingualNeural",
-    "en-US-AndrewMultilingualNeural",
+VOICE_PROFILES = [
+    {"voice": "en-US-AndrewMultilingualNeural", "rate": "+0%", "pitch": "-2Hz"},
+    {"voice": "en-US-BrianMultilingualNeural", "rate": "+1%", "pitch": "-2Hz"},
+    {"voice": "en-US-GuyNeural", "rate": "+0%", "pitch": "-1Hz"},
 ]
 
 
-async def _edge_speak(text: str, output_path: Path, voice: str) -> None:
-    communicate = edge_tts.Communicate(text=text, voice=voice, rate="+6%")
+async def _edge_speak(text: str, output_path: Path, voice: str, rate: str, pitch: str) -> None:
+    communicate = edge_tts.Communicate(text=text, voice=voice, rate=rate, pitch=pitch)
     await communicate.save(str(output_path))
 
 
@@ -22,9 +22,17 @@ def generate_voiceover(script: str, output_path: Path) -> Path:
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     last_error: Exception | None = None
-    for attempt, voice in enumerate(VOICES, start=1):
+    for attempt, profile in enumerate(VOICE_PROFILES, start=1):
         try:
-            asyncio.run(_edge_speak(script, output_path, voice=voice))
+            asyncio.run(
+                _edge_speak(
+                    script,
+                    output_path,
+                    voice=profile["voice"],
+                    rate=profile["rate"],
+                    pitch=profile["pitch"],
+                )
+            )
             return output_path
         except Exception as e:
             last_error = e
