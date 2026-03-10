@@ -19,15 +19,15 @@ def generate_scene_prompts(script: str, video_type: str) -> List[Dict[str, str |
 
     visuals = [
         "man training boxing",
-        "cold morning run",
-        "man journaling",
-        "city sunrise",
-        "man lifting weights",
-        "focus eyes closeup",
-        "business suit walking",
-        "stormy ocean waves",
-        "mountain peak",
-        "empty gym",
+        "man cold morning run",
+        "man journaling desk",
+        "man city sunrise silhouette",
+        "man lifting weights gym",
+        "male focus eyes closeup",
+        "man business suit walking",
+        "man ocean waves silhouette",
+        "man mountain peak",
+        "man empty gym",
     ]
 
     scenes: List[Dict[str, str | int]] = []

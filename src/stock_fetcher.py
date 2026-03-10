@@ -1,4 +1,5 @@
 import random
+import re
 import time
 from pathlib import Path
 from typing import Dict, List
@@ -6,6 +7,34 @@ from typing import Dict, List
 import requests
 
 from config.settings import PEXELS_API_KEY, PIXABAY_API_KEY
+
+
+def _normalize_query(text: str) -> str:
+    q = re.sub(r"[^a-zA-Z0-9 ]", " ", text).strip().lower()
+    q = re.sub(r"\s+", " ", q)
+    return q
+
+
+def _male_query_variants(base_query: str) -> List[str]:
+    base = _normalize_query(base_query)
+    if not base:
+        base = "discipline"
+
+    variants = [
+        f"{base} man",
+        f"male {base}",
+        f"men {base}",
+        base,
+    ]
+
+    # Keep order, remove duplicates.
+    seen: set[str] = set()
+    deduped: List[str] = []
+    for v in variants:
+        if v not in seen:
+            seen.add(v)
+            deduped.append(v)
+    return deduped
 
 
 def _search_pexels(query: str, per_page: int = 10, orientation: str = "portrait") -> List[Dict]:
@@ -156,7 +185,19 @@ def download_clips_for_scenes(
     used_urls: set[str] = set()
     for i, scene in enumerate(scenes, start=1):
         query = str(scene["visual_keyword"])
-        queries = [query, "discipline", "motivation", "success mindset"]
+        queries = []
+        queries.extend(_male_query_variants(query))
+        queries.extend(
+            [
+                "man discipline",
+                "man mental toughness",
+                "male self improvement",
+                "man making decision",
+                "man leadership",
+                "stoic man",
+                "man training gym",
+            ]
+        )
         result: List[Dict] = []
         for q in queries:
             result = search_videos(query=q, per_page=12, orientation=orientation)
