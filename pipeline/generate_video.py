@@ -28,7 +28,7 @@ from src.script_generator import generate_script
 from src.stock_fetcher import download_clips_for_scenes
 from src.thumbnail_generator import generate_thumbnail
 from src.voice_generator import generate_voiceover
-from src.youtube_uploader import publish_video, set_thumbnail, upload_video
+from src.youtube_uploader import get_recent_video_titles, publish_video, set_thumbnail, upload_video
 
 
 def _pick_music() -> Path | None:
@@ -53,7 +53,12 @@ def generate_single_video(force_type: str | None = None, privacy_status: str = "
     privacy_status = _normalize_privacy_status(privacy_status)
 
     try:
-        idea = generate_video_idea(force_type=resolved_video_type)
+        recent_titles = get_recent_video_titles(limit=30)
+        idea = generate_video_idea(
+            force_type=resolved_video_type,
+            recent_titles=recent_titles,
+            candidates=3,
+        )
         script_pack = generate_script(idea)
         script_text = script_pack["script"]
 

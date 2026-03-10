@@ -95,3 +95,28 @@ def publish_video(video_id: str, privacy_status: str = "public") -> None:
             print(f"[YOUTUBE] Publish attempt {attempt} failed: {e}")
             time.sleep(attempt * 2)
     raise RuntimeError("Failed to update publish status after retries")
+
+
+def get_recent_video_titles(limit: int = 25) -> list[str]:
+    youtube = _youtube_client()
+    try:
+        channels = youtube.channels().list(part="contentDetails", mine=True).execute()
+        items = channels.get("items", [])
+        if not items:
+            return []
+
+        uploads_playlist = items[0]["contentDetails"]["relatedPlaylists"]["uploads"]
+        playlist_items = (
+            youtube.playlistItems()
+            .list(part="snippet", playlistId=uploads_playlist, maxResults=max(1, min(limit, 50)))
+            .execute()
+        )
+        titles = []
+        for item in playlist_items.get("items", []):
+            title = item.get("snippet", {}).get("title", "").strip()
+            if title and title.lower() != "private video":
+                titles.append(title)
+        return titles
+    except Exception as e:
+        print(f"[YOUTUBE] Could not fetch recent titles: {e}")
+        return []
