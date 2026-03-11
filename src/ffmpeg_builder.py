@@ -191,7 +191,7 @@ def assemble_video(
     voice_dur = _probe_duration(voiceover_path)
     clip_dur = _probe_duration(silent_video)
     # Voice is the master clock — ensure video covers it fully.
-    final_duration = min(max(clip_dur, voice_dur + 1.0), 185.0)
+    final_duration = max(clip_dur, voice_dur + 1.0)
 
     # If video is shorter than voice, loop it so voice never gets cut off.
     loop_video = clip_dur < voice_dur

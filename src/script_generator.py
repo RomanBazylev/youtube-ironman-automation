@@ -43,7 +43,7 @@ def generate_script(idea: Dict[str, str]) -> Dict[str, str]:
 
         script = obj["script"].strip()
         word_count = len(script.split())
-        if word_count < spec.min_words // 2 or word_count > spec.max_words * 2:
+        if word_count < spec.min_words * 0.7 or word_count > spec.max_words * 1.3:
             print(f"[SCRIPT] LLM returned {word_count} words (spec {spec.min_words}-{spec.max_words}), using fallback")
             raise ValueError("Script word count out of range")
 
