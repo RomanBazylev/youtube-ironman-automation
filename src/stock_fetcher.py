@@ -10,6 +10,13 @@ from config.settings import PEXELS_API_KEY, PIXABAY_API_KEY
 
 
 BLACKLIST_TERMS = {
+    "woman",
+    "women",
+    "female",
+    "girl",
+    "girls",
+    "lady",
+    "ladies",
     "makeup",
     "beauty",
     "skincare",
@@ -188,7 +195,9 @@ def search_videos(query: str, per_page: int = 10, orientation: str = "portrait")
     pixabay = _search_pixabay(query=query, per_page=per_page, orientation=orientation)
     combined = [item for item in (pexels + pixabay) if not _contains_blacklist(str(item.get("searchable_text", "")))]
     combined.sort(key=lambda item: _male_priority_score(str(item.get("searchable_text", ""))), reverse=True)
-    random.shuffle(combined)
+    top = combined[: max(1, len(combined) // 2)]
+    random.shuffle(top)
+    combined = top + combined[len(top):]
     return combined
 
 

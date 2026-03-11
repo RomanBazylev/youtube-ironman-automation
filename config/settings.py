@@ -29,9 +29,9 @@ VIDEO_SPECS = {
         width=1080,
         height=1920,
         fps=30,
-        min_duration_s=20,
+        min_duration_s=24,
         max_duration_s=45,
-        min_words=40,
+        min_words=65,
         max_words=80,
     ),
     "normal": VideoSpec(
