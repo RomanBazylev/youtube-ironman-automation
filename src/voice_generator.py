@@ -7,11 +7,14 @@ import edge_tts
 from gtts import gTTS
 
 
+# Authoritative male voices — natural rate for motivational delivery.
+# GuyNeural: deep & commanding.  AndrewMultilingual: clear & engaging.
+# BrianMultilingual: smooth narrator.  RyanNeural: confident British.
 VOICE_PROFILES = [
-    {"voice": "en-US-BrianMultilingualNeural", "rate": "+12%", "pitch": "-8Hz"},
-    {"voice": "en-US-AndrewMultilingualNeural", "rate": "+12%", "pitch": "-8Hz"},
-    {"voice": "en-US-GuyNeural", "rate": "+10%", "pitch": "-8Hz"},
-    {"voice": "en-GB-RyanNeural", "rate": "+10%", "pitch": "-8Hz"},
+    {"voice": "en-US-GuyNeural", "rate": "+5%", "pitch": "+0Hz"},
+    {"voice": "en-US-AndrewMultilingualNeural", "rate": "+5%", "pitch": "+0Hz"},
+    {"voice": "en-US-BrianMultilingualNeural", "rate": "+5%", "pitch": "+0Hz"},
+    {"voice": "en-GB-RyanNeural", "rate": "+5%", "pitch": "+0Hz"},
 ]
 
 
@@ -20,21 +23,17 @@ async def _edge_speak(text: str, output_path: Path, voice: str, rate: str, pitch
     await communicate.save(str(output_path))
 
 
-def _masculinize_and_speedup(output_path: Path) -> None:
-    tuned = output_path.with_name(output_path.stem + "_tuned" + output_path.suffix)
-    subprocess.run(
+def _probe_duration(path: Path) -> float:
+    out = subprocess.check_output(
         [
-            "ffmpeg",
-            "-y",
-            "-i",
-            str(output_path),
-            "-af",
-            "asetrate=44100*0.90,aresample=44100,atempo=1.28,loudnorm=I=-16:LRA=11:TP=-1.5",
-            str(tuned),
+            "ffprobe", "-v", "error",
+            "-show_entries", "format=duration",
+            "-of", "default=noprint_wrappers=1:nokey=1",
+            str(path),
         ],
-        check=True,
-    )
-    tuned.replace(output_path)
+        text=True,
+    ).strip()
+    return float(out)
 
 
 def generate_voiceover(script: str, output_path: Path) -> Path:
@@ -52,7 +51,10 @@ def generate_voiceover(script: str, output_path: Path) -> Path:
                     pitch=profile["pitch"],
                 )
             )
-            _masculinize_and_speedup(output_path)
+            dur = _probe_duration(output_path)
+            if dur < 5.0:
+                raise RuntimeError(f"Voice too short ({dur:.1f}s), retrying")
+            print(f"[VOICE] {profile['voice']} OK — {dur:.1f}s")
             return output_path
         except Exception as e:
             last_error = e
@@ -62,10 +64,7 @@ def generate_voiceover(script: str, output_path: Path) -> Path:
     # Fallback keeps pipeline alive if edge-tts is blocked (e.g., 403 handshake).
     try:
         gTTS(text=script, lang="en", slow=False).save(str(output_path))
-        _masculinize_and_speedup(output_path)
         print("[VOICE] Fallback to gTTS succeeded")
         return output_path
     except Exception as e:
         raise RuntimeError(f"Voice generation failed (edge-tts + gTTS). Last edge error: {last_error}") from e
-
-    return output_path

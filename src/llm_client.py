@@ -56,5 +56,11 @@ def _chat_with_groq(system_prompt: str, user_prompt: str, temperature: float) ->
 def chat_json(system_prompt: str, user_prompt: str, temperature: float = 0.8) -> str:
     # Prefer Groq for speed and lower cost in CI, fallback to OpenAI.
     if GROQ_API_KEY:
-        return _chat_with_groq(system_prompt, user_prompt, temperature)
+        try:
+            return _chat_with_groq(system_prompt, user_prompt, temperature)
+        except Exception as e:
+            if OPENAI_API_KEY:
+                print(f"[LLM] Groq failed ({e}), falling back to OpenAI")
+            else:
+                raise
     return _chat_with_openai(system_prompt, user_prompt, temperature)

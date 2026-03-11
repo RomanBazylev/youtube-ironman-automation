@@ -206,6 +206,8 @@ def download_video(url: str, output_path: Path) -> Path:
     last_error: Exception | None = None
     for attempt in range(1, 4):
         try:
+            if output_path.exists():
+                output_path.unlink()
             with requests.get(url, stream=True, timeout=120) as r:
                 r.raise_for_status()
                 with output_path.open("wb") as f:

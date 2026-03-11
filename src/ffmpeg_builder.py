@@ -54,7 +54,7 @@ def _prepare_clip(
             "-preset",
             FFMPEG_PRESET,
             "-crf",
-            "24",
+            FFMPEG_CRF,
             str(dst),
         ]
     )
@@ -111,6 +111,7 @@ def _write_karaoke_ass(
     header = (
         "[Script Info]\n"
         "ScriptType: v4.00+\n"
+        "WrapStyle: 0\n"
         f"PlayResX: {width}\n"
         f"PlayResY: {height}\n"
         "ScaledBorderAndShadow: yes\n\n"
@@ -189,7 +190,24 @@ def assemble_video(
 
     voice_dur = _probe_duration(voiceover_path)
     clip_dur = _probe_duration(silent_video)
-    final_duration = min(max(clip_dur, voice_dur), 185.0)
+    # Voice is the master clock — ensure video covers it fully.
+    final_duration = min(max(clip_dur, voice_dur + 1.0), 185.0)
+
+    # If video is shorter than voice, loop it so voice never gets cut off.
+    loop_video = clip_dur < voice_dur
+    if loop_video:
+        looped = temp_dir / "video_looped.mp4"
+        _run(
+            [
+                "ffmpeg", "-y",
+                "-stream_loop", "-1",
+                "-i", str(silent_video),
+                "-t", f"{final_duration:.2f}",
+                "-c", "copy",
+                str(looped),
+            ]
+        )
+        silent_video = looped
 
     ass_path = _write_karaoke_ass(scenes=scenes, ass_path=temp_dir / "captions.ass", width=width, height=height)
     ass_filter_path = ass_path.resolve().as_posix().replace(":", "\\:")
@@ -255,7 +273,6 @@ def assemble_video(
             "aac",
             "-b:a",
             AUDIO_BITRATE,
-            "-shortest",
             str(output_path),
         ]
     )

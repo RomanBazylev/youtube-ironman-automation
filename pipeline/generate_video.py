@@ -53,7 +53,11 @@ def generate_single_video(force_type: str | None = None, privacy_status: str = "
     privacy_status = _normalize_privacy_status(privacy_status)
 
     try:
-        recent_titles = get_recent_video_titles(limit=30)
+        try:
+            recent_titles = get_recent_video_titles(limit=30)
+        except Exception as e:
+            print(f"[WARN] Could not fetch recent titles: {e}")
+            recent_titles = []
         idea = generate_video_idea(
             force_type=resolved_video_type,
             recent_titles=recent_titles,
@@ -95,10 +99,11 @@ def generate_single_video(force_type: str | None = None, privacy_status: str = "
         thumb_path = THUMB_DIR / f"thumb_{ts}.jpg"
         generate_thumbnail(output_video, thumb_path)
 
-        full_description = (
-            f"{script_pack['seo_description']}\n\n"
-            "#discipline #selfimprovement #stoicism #mindset #success"
-        )
+        tag_list = script_pack.get("tags", ["discipline", "selfimprovement", "stoicism", "mindset"])
+        hashtags = " ".join(f"#{t.strip().replace(' ', '')}" for t in tag_list[:8] if t.strip())
+        if not hashtags:
+            hashtags = "#discipline #selfimprovement #stoicism #mindset #success"
+        full_description = f"{script_pack['seo_description']}\n\n{hashtags}"
         video_id = upload_video(
             video_path=output_video,
             title=script_pack["seo_title"],
@@ -131,8 +136,11 @@ def generate_single_video(force_type: str | None = None, privacy_status: str = "
         return result
     finally:
         # Clean transient files to reduce artifact size and CI runtime.
-        if TEMP_DIR.exists():
-            shutil.rmtree(TEMP_DIR)
+        try:
+            if TEMP_DIR.exists():
+                shutil.rmtree(TEMP_DIR)
+        except Exception as e:
+            print(f"[WARN] Temp cleanup failed: {e}")
 
 
 def generate_multiple_videos(

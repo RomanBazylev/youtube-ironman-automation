@@ -40,8 +40,15 @@ def generate_script(idea: Dict[str, str]) -> Dict[str, str]:
         tags = obj.get("tags", [])
         if isinstance(tags, str):
             tags = [t.strip() for t in tags.split(",") if t.strip()]
+
+        script = obj["script"].strip()
+        word_count = len(script.split())
+        if word_count < spec.min_words // 2 or word_count > spec.max_words * 2:
+            print(f"[SCRIPT] LLM returned {word_count} words (spec {spec.min_words}-{spec.max_words}), using fallback")
+            raise ValueError("Script word count out of range")
+
         return {
-            "script": obj["script"].strip(),
+            "script": script,
             "seo_title": obj.get("seo_title", idea["title"]).strip(),
             "seo_description": obj.get("seo_description", idea["hook"]).strip(),
             "tags": tags[:15],

@@ -51,12 +51,11 @@ def upload_video(
         },
     }
 
-    media = MediaFileUpload(str(video_path), chunksize=-1, resumable=True)
-    request = youtube.videos().insert(part="snippet,status", body=body, media_body=media)
-
     last_error: Exception | None = None
     for attempt in range(1, 4):
         try:
+            media = MediaFileUpload(str(video_path), chunksize=-1, resumable=True)
+            request = youtube.videos().insert(part="snippet,status", body=body, media_body=media)
             response = None
             while response is None:
                 _, response = request.next_chunk()
