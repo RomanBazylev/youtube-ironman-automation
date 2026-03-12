@@ -39,15 +39,49 @@ def _probe_duration(path: Path) -> float:
 
 
 def _estimate_word_events(text: str, total_duration: float) -> List[Dict]:
-    """Estimate word timestamps by distributing evenly over audio duration."""
+    """Estimate word timestamps with sentence-aware distribution.
+
+    Splits text into sentences, allocates time proportionally by word count,
+    inserts inter-sentence gaps, and distributes words evenly within each sentence.
+    This significantly reduces cumulative drift vs. naive uniform distribution.
+    """
     words = text.split()
     if not words:
         return []
-    word_dur = total_duration / len(words)
-    return [
-        {"text": w, "offset": i * word_dur, "duration": word_dur * 0.9}
-        for i, w in enumerate(words)
-    ]
+
+    # Split into sentences on . ! ? (keep short fragments together).
+    import re as _re
+    raw_sentences = _re.split(r'(?<=[.!?])\s+', text.strip())
+    sentences = [s for s in raw_sentences if s.split()]
+    if not sentences:
+        sentences = [text]
+
+    total_words = sum(len(s.split()) for s in sentences)
+    if total_words == 0:
+        return []
+
+    inter_sentence_gap = 0.25
+    total_gap_time = inter_sentence_gap * max(0, len(sentences) - 1)
+    available_speech = max(0.5, total_duration - total_gap_time)
+
+    events: List[Dict] = []
+    cursor = 0.0
+    for idx, sentence in enumerate(sentences):
+        s_words = sentence.split()
+        if not s_words:
+            continue
+        # Allocate time proportionally to word count.
+        s_duration = available_speech * (len(s_words) / total_words)
+        w_dur = s_duration / len(s_words)
+        for w in s_words:
+            events.append({"text": w, "offset": cursor, "duration": w_dur * 0.9})
+            cursor += w_dur
+        # Add gap between sentences (not after the last one).
+        if idx < len(sentences) - 1:
+            cursor += inter_sentence_gap
+
+    print(f"[VOICE] WARNING: using estimated timestamps ({len(events)} words, {len(sentences)} sentences)")
+    return events
 
 
 def _generate_openai_tts(text: str, output_path: Path) -> List[Dict]:
@@ -118,6 +152,12 @@ def generate_voiceover(script: str, output_path: Path) -> Tuple[Path, List[Dict]
             dur = _probe_duration(output_path)
             if dur < 3.0:
                 raise RuntimeError(f"Voice too short ({dur:.1f}s)")
+
+            # Guard: edge-tts may succeed but emit zero WordBoundary events.
+            if not word_events and dur >= 3.0:
+                print(f"[VOICE] WARNING: edge-tts returned 0 word boundaries — using estimated timestamps")
+                word_events = _estimate_word_events(script, dur)
+
             print(f"[VOICE] {voice} rate={rate} — {len(word_events)} words — {dur:.1f}s")
 
             ts_path = output_path.with_suffix(".words.json")

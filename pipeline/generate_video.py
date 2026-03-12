@@ -75,6 +75,7 @@ def generate_single_video(force_type: str | None = None, privacy_status: str = "
 
         voiceover_path = TEMP_DIR / "voiceover.mp3"
         voiceover_path, word_events = generate_voiceover(script_text, voiceover_path)
+        print(f"[PIPELINE] word_events: {len(word_events)} events")
 
         spec = VIDEO_SPECS[idea["video_type"]]
         ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")

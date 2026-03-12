@@ -175,6 +175,9 @@ def _write_synced_ass(
         "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n"
     )
 
+    if not word_events:
+        print("[SUBS] WARNING: zero word_events — ASS file will have no dialogue lines")
+
     lines = _group_words_into_lines(word_events, max_words_per_line=4 if is_short else 6)
     events: list[str] = []
     for line in lines:
@@ -317,9 +320,10 @@ def assemble_video(
                 "-filter_complex",
                 (
                     f"[1:a]acompressor=threshold=-18dB:ratio=2.5:attack=5:release=120,{voice_pad}[va];"
+                    "[va]asplit=2[va1][va2];"
                     "[2:a]highpass=f=80,lowpass=f=14000,volume=0.16[ma];"
-                    "[ma][va]sidechaincompress=threshold=0.03:ratio=10:attack=15:release=250[ducked];"
-                    "[va][ducked]amix=inputs=2:duration=first:normalize=0[a]"
+                    "[ma][va1]sidechaincompress=threshold=0.03:ratio=10:attack=15:release=250[ducked];"
+                    "[va2][ducked]amix=inputs=2:duration=first:normalize=0[a]"
                 ),
                 "-map", "0:v",
                 "-map", "[a]",

@@ -13,12 +13,84 @@ FALLBACK_TOPICS = [
     "stoicism",
     "mental toughness",
     "success mindset",
+    "emotional control",
+    "purpose and mission",
+    "loneliness in men",
+    "confidence building",
+    "habits of winners",
+    "handling rejection",
+    "accountability",
+    "financial discipline",
+    "silent leadership",
 ]
 
 FALLBACK_HOOKS = [
     "Weak men ignore this until it destroys them.",
     "The truth about discipline nobody wants to hear.",
     "Strong men do this when no one is watching.",
+    "Most men will never recover from this mistake.",
+    "This one habit separates leaders from followers.",
+    "Nobody tells young men this — and it ruins them.",
+    "If you feel lost in your 20s, watch this now.",
+    "The dark truth about comfort zones.",
+    "Why average men stay average forever.",
+    "Stop doing this and your life changes in 30 days.",
+]
+
+ANGLES = [
+    "uncomfortable truths",
+    "common mistakes men make",
+    "what high-value men do differently",
+    "lessons from ancient warriors",
+    "psychological tricks for dominance",
+    "how modern society weakens men",
+    "things men learn too late",
+    "silent rules of respect",
+    "why most men fail at discipline",
+    "mindset shifts that create winners",
+    "the price of being soft",
+    "dark psychology of success",
+    "what your father never taught you",
+    "signs you are mentally weak",
+    "how to rebuild yourself from nothing",
+    "why loneliness is a superpower",
+    "the stoic response to chaos",
+    "habits that destroy men slowly",
+    "what women secretly respect in men",
+    "rules every man should live by",
+    "how to stop caring what people think",
+    "why pain is necessary for growth",
+]
+
+FORMATS = [
+    "listicle (X rules/truths/habits)",
+    "myth vs reality",
+    "one brutal rule",
+    "before vs after mindset",
+    "day-in-the-life contrast",
+    "historical example + lesson",
+    "countdown (worst to best)",
+    "unpopular opinion deep dive",
+    "character study (fictional or real)",
+    "if-then consequences",
+    "challenge or dare format",
+    "step-by-step transformation",
+    "comparison (weak vs strong response)",
+    "motivational monologue",
+    "question-and-answer reveal",
+]
+
+TARGET_AUDIENCES = [
+    "men in their 20s figuring life out",
+    "men recovering from failure",
+    "introverted men who feel overlooked",
+    "men stuck in dead-end routines",
+    "ambitious men who lack discipline",
+    "men going through a breakup",
+    "men who want to command respect",
+    "young professionals under pressure",
+    "men who overthink everything",
+    "fathers trying to set an example",
 ]
 
 WEAK_WORDS = {"maybe", "could", "sometimes", "thing", "stuff", "probably"}
@@ -62,18 +134,27 @@ def _score_hook(hook: str) -> float:
 
 
 def _one_idea(force_type: str | None = None) -> Dict[str, str]:
+    angle = random.choice(ANGLES)
+    fmt = random.choice(FORMATS)
+    audience = random.choice(TARGET_AUDIENCES)
+
     prompt = (
         "Generate one viral faceless commentary YouTube idea in JSON with keys: "
         "title, hook, topic, video_type. video_type must be 'short' or 'normal'. "
         "Themes: male psychology, discipline, self improvement, stoicism, "
-        "mental toughness, success mindset. Use provocative angle."
+        "mental toughness, success mindset.\n\n"
+        f"ANGLE: {angle}\n"
+        f"FORMAT: {fmt}\n"
+        f"TARGET AUDIENCE: {audience}\n\n"
+        "Make the title and hook uniquely match this angle, format, and audience. "
+        "Be provocative but safe for YouTube."
     )
 
     try:
         raw = chat_json(
             system_prompt="You generate viral but safe YouTube faceless commentary ideas.",
             user_prompt=prompt,
-            temperature=0.9,
+            temperature=0.95,
         )
         obj = json.loads(raw)
         video_type = (force_type or obj.get("video_type", "short")).lower()
