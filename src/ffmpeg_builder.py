@@ -148,9 +148,11 @@ def _write_synced_ass(
     font_size = 64 if is_short else 48
     # Place text in lower-center area but above bottom UI on phones.
     margin_v = 350 if is_short else 100
-    # Bright yellow highlight for spoken words, white for upcoming.
-    primary_color = "&H00FFFFFF"    # White (upcoming words)
-    highlight_color = "&H0000D4FF"  # Bright yellow-orange (spoken words)
+    # ASS karaoke: \k fills SecondaryColour → PrimaryColour.
+    # PrimaryColour = what word becomes AFTER its time (spoken/highlighted).
+    # SecondaryColour = what word looks like BEFORE its time (upcoming).
+    primary_color = "&H0000D4FF"    # Bright yellow-orange (spoken word — karaoke fills with this)
+    secondary_color = "&H00FFFFFF"  # White (upcoming words — shown before karaoke timer)
     outline_color = "&H00000000"    # Black outline
     shadow_color = "&H80000000"     # Semi-transparent black shadow
 
@@ -165,7 +167,7 @@ def _write_synced_ass(
         "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, "
         "Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, "
         "Alignment, MarginL, MarginR, MarginV, Encoding\n"
-        f"Style: Kara,Arial,{font_size},{primary_color},{highlight_color},{outline_color},{shadow_color},"
+        f"Style: Kara,Liberation Sans,{font_size},{primary_color},{secondary_color},{outline_color},{shadow_color},"
         "1,0,0,0,100,100,1,0,1,4,2,2,30,30,"
         f"{margin_v},1\n\n"
         "[Events]\n"
@@ -182,13 +184,14 @@ def _write_synced_ass(
         for w in line["words"]:
             dur_cs = max(5, int(w["duration"] * 100))
             safe_text = _safe_drawtext_text(w["text"]).upper()
-            parts.append(f"{{\\k{dur_cs}}}{safe_text}")
+            parts.append(f"{{\\kf{dur_cs}}}{safe_text}")
         kara_text = " ".join(parts)
         events.append(
             f"Dialogue: 0,{_fmt_ass_time(line_start)},{_fmt_ass_time(line_end)},Kara,,0,0,0,,{kara_text}"
         )
 
     ass_path.write_text(header + "\n".join(events) + "\n", encoding="utf-8")
+    print(f"[SUBS] ASS written: {len(events)} dialogue lines, {len(word_events)} word events → {ass_path}")
     return ass_path
 
 
@@ -241,8 +244,8 @@ def assemble_video(
 
     voice_dur = _probe_duration(voiceover_path)
     clip_dur = _probe_duration(silent_video)
-    # Voice is the master clock — ensure video covers it fully.
-    final_duration = max(clip_dur, voice_dur + 1.0)
+    # Voice is the master clock — video duration = voice + small outro buffer.
+    final_duration = voice_dur + 1.5
 
     # If video is shorter than voice, loop it so voice never gets cut off.
     loop_video = clip_dur < voice_dur
@@ -263,10 +266,12 @@ def assemble_video(
     ass_path = _write_synced_ass(word_events=word_events, ass_path=temp_dir / "captions.ass", width=width, height=height)
     ass_filter_path = ass_path.resolve().as_posix().replace(":", "\\:")
     # Cinematic look: slight contrast boost + desaturation + subtitles.
+    # Use ass= filter (not subtitles=) — dedicated ASS renderer, more reliable.
     vf = (
         f"eq=contrast=1.1:brightness=-0.03:saturation=0.85,"
-        f"subtitles='{ass_filter_path}'"
+        f"ass='{ass_filter_path}'"
     )
+    print(f"[VIDEO] voice={voice_dur:.1f}s clips={clip_dur:.1f}s final={final_duration:.1f}s loop={loop_video}")
 
     cmd = [
         "ffmpeg",
