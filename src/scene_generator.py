@@ -1,4 +1,5 @@
 import math
+import random
 import re
 from typing import Dict, List
 
@@ -18,31 +19,40 @@ def generate_scene_prompts(script: str, video_type: str) -> List[Dict[str, str |
     approx_total_s = max(25 if video_type == "short" else 60, int(len(script.split()) / 2.0))
     scene_count = max(9, math.ceil(approx_total_s / target_scene_duration))
 
+    # Diverse cinematic visuals — dark, moody, masculine atmosphere.
     visuals = [
-        "man training boxing",
-        "man cold morning run",
-        "man journaling desk",
-        "man city sunrise silhouette",
-        "man lifting weights gym",
-        "male focus eyes closeup",
-        "man business suit walking",
-        "man ocean waves silhouette",
-        "man mountain peak",
-        "man empty gym",
+        "man boxing training dark gym",
+        "man running alone morning fog",
+        "man journaling at wooden desk",
+        "city skyline sunrise silhouette man",
+        "man deadlift heavy weights gym",
+        "intense male eyes closeup focus",
+        "man suit walking city confident",
+        "ocean waves dark dramatic",
+        "man standing mountain summit alone",
+        "empty gym dark moody lighting",
+        "man meditating dark room calm",
+        "man walking rain city night",
+        "man reading book library alone",
+        "chess pieces closeup strategy",
+        "clock ticking time passing",
+        "man pushups outdoor park dawn",
+        "fire flames dark background cinematic",
+        "man cold shower water face",
+        "lion walking powerful majestic",
+        "wolf lone dark forest",
     ]
+
+    # Shuffle visuals so consecutive videos look different.
+    random.shuffle(visuals)
 
     scenes: List[Dict[str, str | int]] = []
     for i in range(scene_count):
-        text = lines[i % len(lines)]
-        clean_caption = re.sub(r"[^A-Za-z0-9 '\-]", "", text).strip()
-        max_caption_len = 42 if video_type == "normal" else 34
-        if len(clean_caption) > max_caption_len:
-            clean_caption = clean_caption[:max_caption_len - 3].rstrip() + "..."
         scenes.append(
             {
                 "visual_keyword": visuals[i % len(visuals)],
-                "duration": 3 if video_type == "short" else 3,
-                "caption_text": clean_caption.upper(),
+                "duration": 3,
+                "caption_text": "",  # Subtitles come from voice word-timestamps now.
             }
         )
     return scenes

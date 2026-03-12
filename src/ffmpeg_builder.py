@@ -82,31 +82,77 @@ def _fmt_ass_time(seconds: float) -> str:
     return f"{h}:{m:02d}:{s:02d}.{cs:02d}"
 
 
-def _to_karaoke_text(caption: str, duration_s: float) -> str:
-    words = [w for w in caption.split() if w]
-    if not words:
-        words = ["STAY", "HARD"]
+def _group_words_into_lines(
+    word_events: list[dict],
+    max_words_per_line: int = 5,
+    max_gap_s: float = 0.6,
+) -> list[dict]:
+    """Group word-boundary events into subtitle lines."""
+    if not word_events:
+        return []
 
-    total_cs = max(30, int(duration_s * 100))
-    base = max(8, total_cs // len(words))
-    rem = total_cs - base * len(words)
+    lines: list[dict] = []
+    buf_words: list[str] = []
+    buf_start = 0.0
+    buf_end = 0.0
+    buf_kara: list[dict] = []
 
-    parts = []
-    for i, w in enumerate(words):
-        extra = 1 if i < rem else 0
-        parts.append(f"{{\\k{base + extra}}}{w}")
-    return " ".join(parts)
+    for ev in word_events:
+        word = ev["text"]
+        start = ev["offset"]
+        dur = ev["duration"]
+        end = start + dur
+
+        # Start new line if too many words or big pause.
+        if buf_words and (len(buf_words) >= max_words_per_line or (start - buf_end) > max_gap_s):
+            lines.append({
+                "start": buf_start,
+                "end": buf_end,
+                "text": " ".join(buf_words),
+                "words": list(buf_kara),
+            })
+            buf_words = []
+            buf_kara = []
+
+        if not buf_words:
+            buf_start = start
+
+        buf_words.append(word)
+        buf_kara.append({"text": word, "offset": start, "duration": dur})
+        buf_end = end
+
+    if buf_words:
+        lines.append({
+            "start": buf_start,
+            "end": buf_end,
+            "text": " ".join(buf_words),
+            "words": list(buf_kara),
+        })
+
+    return lines
 
 
-def _write_karaoke_ass(
-    scenes: List[Dict[str, str | int]],
+def _write_synced_ass(
+    word_events: list[dict],
     ass_path: Path,
     width: int,
     height: int,
 ) -> Path:
+    """Write ASS subtitles synced to actual word timestamps from edge-tts.
+
+    Style: large bold white text, thick black outline, center screen.
+    Karaoke highlight: words turn bright yellow as spoken (viral motivation style).
+    """
     is_short = height > width
-    font_size = 54 if is_short else 42
-    margin_v = 210 if is_short else 80
+    # Large, impactful text — like top motivation/quotes channels.
+    font_size = 64 if is_short else 48
+    # Place text in lower-center area but above bottom UI on phones.
+    margin_v = 350 if is_short else 100
+    # Bright yellow highlight for spoken words, white for upcoming.
+    primary_color = "&H00FFFFFF"    # White (upcoming words)
+    highlight_color = "&H0000D4FF"  # Bright yellow-orange (spoken words)
+    outline_color = "&H00000000"    # Black outline
+    shadow_color = "&H80000000"     # Semi-transparent black shadow
 
     header = (
         "[Script Info]\n"
@@ -119,24 +165,28 @@ def _write_karaoke_ass(
         "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, "
         "Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, "
         "Alignment, MarginL, MarginR, MarginV, Encoding\n"
-        f"Style: Kara,DejaVu Sans,{font_size},&H00FFFFFF,&H0000A5FF,&H00000000,&H4D000000,"
-        "1,0,0,0,100,100,0,0,1,3,0,2,40,40,"
+        f"Style: Kara,Arial,{font_size},{primary_color},{highlight_color},{outline_color},{shadow_color},"
+        "1,0,0,0,100,100,1,0,1,4,2,2,30,30,"
         f"{margin_v},1\n\n"
         "[Events]\n"
         "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n"
     )
 
-    events: List[str] = []
-    start = 0.0
-    for scene in scenes:
-        dur = float(scene["duration"])
-        end = start + dur
-        txt = _safe_drawtext_text(str(scene["caption_text"]))
-        kara = _to_karaoke_text(txt, dur)
+    lines = _group_words_into_lines(word_events, max_words_per_line=4 if is_short else 6)
+    events: list[str] = []
+    for line in lines:
+        line_start = line["start"]
+        line_end = line["end"] + 0.15  # Small buffer so last word stays visible.
+        # Build karaoke tags from per-word timing.
+        parts = []
+        for w in line["words"]:
+            dur_cs = max(5, int(w["duration"] * 100))
+            safe_text = _safe_drawtext_text(w["text"]).upper()
+            parts.append(f"{{\\k{dur_cs}}}{safe_text}")
+        kara_text = " ".join(parts)
         events.append(
-            f"Dialogue: 0,{_fmt_ass_time(start)},{_fmt_ass_time(end)},Kara,,0,0,0,,{kara}"
+            f"Dialogue: 0,{_fmt_ass_time(line_start)},{_fmt_ass_time(line_end)},Kara,,0,0,0,,{kara_text}"
         )
-        start = end
 
     ass_path.write_text(header + "\n".join(events) + "\n", encoding="utf-8")
     return ass_path
@@ -146,6 +196,7 @@ def assemble_video(
     clips: List[Path],
     scenes: List[Dict[str, str | int]],
     voiceover_path: Path,
+    word_events: list[dict],
     music_path: Path | None,
     output_path: Path,
     temp_dir: Path,
@@ -209,9 +260,13 @@ def assemble_video(
         )
         silent_video = looped
 
-    ass_path = _write_karaoke_ass(scenes=scenes, ass_path=temp_dir / "captions.ass", width=width, height=height)
+    ass_path = _write_synced_ass(word_events=word_events, ass_path=temp_dir / "captions.ass", width=width, height=height)
     ass_filter_path = ass_path.resolve().as_posix().replace(":", "\\:")
-    vf = f"subtitles='{ass_filter_path}'"
+    # Cinematic look: slight contrast boost + desaturation + subtitles.
+    vf = (
+        f"eq=contrast=1.1:brightness=-0.03:saturation=0.85,"
+        f"subtitles='{ass_filter_path}'"
+    )
 
     cmd = [
         "ffmpeg",

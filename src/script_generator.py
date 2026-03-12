@@ -8,11 +8,22 @@ def generate_script(idea: Dict[str, str]) -> Dict[str, str]:
     video_type = idea["video_type"]
     spec = VIDEO_SPECS[video_type]
     prompt = (
-        "Return JSON with keys: script, seo_title, seo_description, tags. "
-        f"Length: {spec.min_words}-{spec.max_words} words. "
-        "Script structure: hook, points, conclusion CTA. "
-        "Use short punchy sentences and one-line paragraphs. "
-        f"Topic: {idea['topic']}. Hook seed: {idea['hook']}."
+        "Return JSON with keys: script, seo_title, seo_description, tags.\n"
+        f"Script length: exactly {spec.min_words}-{spec.max_words} words.\n"
+        "Channel style: masculine, direct, motivational commentary for men.\n"
+        "Script rules:\n"
+        "- First sentence MUST be a provocative hook that stops the scroll.\n"
+        "- Use short punchy sentences. Max 12 words per sentence.\n"
+        "- One idea per sentence. No filler words.\n"
+        "- Speak directly to 'you'. Be commanding, not preachy.\n"
+        "- Include concrete examples: wake up at 5am, cold shower, gym at 6.\n"
+        "- End with a strong call-to-action: follow, save, share.\n"
+        "- Tone: confident, calm authority. Like a mentor, not a drill sergeant.\n"
+        "- NO emojis, NO hashtags in the script, NO questions.\n"
+        f"Topic: {idea['topic']}. Hook seed: {idea['hook']}.\n"
+        "seo_title: max 70 chars, clickbait but honest. Include power words.\n"
+        "seo_description: 2-3 sentences summarizing the message.\n"
+        "tags: list of 8-12 relevant single-word or two-word tags."
     )
 
     if not GROQ_API_KEY and not OPENAI_API_KEY:

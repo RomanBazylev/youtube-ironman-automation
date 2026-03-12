@@ -60,10 +60,10 @@ YOUTUBE_REFRESH_TOKEN = os.getenv("YOUTUBE_REFRESH_TOKEN", "")
 DEFAULT_LANGUAGE = "en"
 DEFAULT_TIMEZONE = "UTC"
 
-# Keep CI fast and cheap.
-FFMPEG_PRESET = "veryfast"
-FFMPEG_CRF = "21"
-AUDIO_BITRATE = "128k"
+# Quality balance: 'fast' gives visibly better quality than 'veryfast' with +~30% encode time.
+FFMPEG_PRESET = "fast"
+FFMPEG_CRF = "20"
+AUDIO_BITRATE = "192k"
 
 
 def ensure_build_dirs() -> None:

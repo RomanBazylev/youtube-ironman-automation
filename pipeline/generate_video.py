@@ -20,7 +20,6 @@ from config.settings import (
     VIDEO_SPECS,
     ensure_build_dirs,
 )
-from src.caption_generator import generate_captions
 from src.ffmpeg_builder import assemble_video
 from src.idea_generator import generate_video_idea
 from src.scene_generator import generate_scene_prompts
@@ -67,9 +66,6 @@ def generate_single_video(force_type: str | None = None, privacy_status: str = "
         script_text = script_pack["script"]
 
         scenes = generate_scene_prompts(script=script_text, video_type=idea["video_type"])
-        captions = generate_captions(scenes)
-        for i, cap in enumerate(captions):
-            scenes[i]["caption_text"] = cap
 
         clips = download_clips_for_scenes(
             scenes=scenes,
@@ -78,7 +74,7 @@ def generate_single_video(force_type: str | None = None, privacy_status: str = "
         )
 
         voiceover_path = TEMP_DIR / "voiceover.mp3"
-        generate_voiceover(script_text, voiceover_path)
+        voiceover_path, word_events = generate_voiceover(script_text, voiceover_path)
 
         spec = VIDEO_SPECS[idea["video_type"]]
         ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
@@ -88,6 +84,7 @@ def generate_single_video(force_type: str | None = None, privacy_status: str = "
             clips=clips,
             scenes=scenes,
             voiceover_path=voiceover_path,
+            word_events=word_events,
             music_path=_pick_music(),
             output_path=output_video,
             temp_dir=TEMP_DIR / "render",
