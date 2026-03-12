@@ -8,6 +8,7 @@ from config.settings import AUDIO_BITRATE, FFMPEG_CRF, FFMPEG_PRESET
 
 
 def _run(cmd: List[str]) -> None:
+    print(f"[CMD] {' '.join(cmd[:6])}... ({len(cmd)} args)")
     subprocess.run(cmd, check=True)
 
 
@@ -167,7 +168,7 @@ def _write_synced_ass(
         "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, "
         "Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, "
         "Alignment, MarginL, MarginR, MarginV, Encoding\n"
-        f"Style: Kara,Liberation Sans,{font_size},{primary_color},{secondary_color},{outline_color},{shadow_color},"
+        f"Style: Kara,DejaVu Sans,{font_size},{primary_color},{secondary_color},{outline_color},{shadow_color},"
         "1,0,0,0,100,100,1,0,1,4,2,2,30,30,"
         f"{margin_v},1\n\n"
         "[Events]\n"
@@ -264,23 +265,50 @@ def assemble_video(
         silent_video = looped
 
     ass_path = _write_synced_ass(word_events=word_events, ass_path=temp_dir / "captions.ass", width=width, height=height)
-    ass_filter_path = ass_path.resolve().as_posix().replace(":", "\\:")
-    # Cinematic look: slight contrast boost + desaturation + subtitles.
-    # Use ass= filter (not subtitles=) — dedicated ASS renderer, more reliable.
-    vf = (
-        f"eq=contrast=1.1:brightness=-0.03:saturation=0.85,"
-        f"ass='{ass_filter_path}'"
-    )
-    print(f"[VIDEO] voice={voice_dur:.1f}s clips={clip_dur:.1f}s final={final_duration:.1f}s loop={loop_video}")
 
+    # === PASS 1: burn subtitles + color grading into the silent video ===
+    # This avoids filter_complex path-escaping issues with the subtitles filter.
+    graded_video = temp_dir / "video_graded.mp4"
+    # For -vf subtitles filter: escape only special chars that ffmpeg filter parser uses.
+    # On Linux CI the path has no colons or backslashes, so minimal escaping needed.
+    ass_posix = ass_path.resolve().as_posix()
+    # Escape chars: \ → \\, : → \:, ' → \', [ → \[, ] → \]
+    ass_escaped = (
+        ass_posix
+        .replace("\\", "\\\\")
+        .replace(":", "\\:")
+        .replace("'", "\\'")
+        .replace("[", "\\[")
+        .replace("]", "\\]")
+    )
+    vf_burn = (
+        f"eq=contrast=1.1:brightness=-0.03:saturation=0.85,"
+        f"subtitles={ass_escaped}"
+    )
+    _run(
+        [
+            "ffmpeg", "-y",
+            "-i", str(silent_video),
+            "-vf", vf_burn,
+            "-t", f"{final_duration:.2f}",
+            "-c:v", "libx264",
+            "-preset", FFMPEG_PRESET,
+            "-crf", FFMPEG_CRF,
+            "-an",
+            str(graded_video),
+        ]
+    )
+    print(f"[VIDEO] voice={voice_dur:.1f}s clips={clip_dur:.1f}s final={final_duration:.2f}s loop={loop_video}")
+
+    # === PASS 2: combine graded video + voice + optional music ===
     cmd = [
-        "ffmpeg",
-        "-y",
-        "-i",
-        str(silent_video),
-        "-i",
-        str(voiceover_path),
+        "ffmpeg", "-y",
+        "-i", str(graded_video),
+        "-i", str(voiceover_path),
     ]
+
+    # Pad voice audio with silence to fill the full video duration.
+    voice_pad = f"apad=whole_dur={final_duration:.2f}"
 
     if music_path and music_path.exists():
         cmd.extend(["-stream_loop", "-1", "-i", str(music_path)])
@@ -288,16 +316,13 @@ def assemble_video(
             [
                 "-filter_complex",
                 (
-                    f"[0:v]{vf}[v];"
-                    "[1:a]loudnorm=I=-16:LRA=11:TP=-1.5,acompressor=threshold=-18dB:ratio=2.5:attack=5:release=120[va];"
+                    f"[1:a]acompressor=threshold=-18dB:ratio=2.5:attack=5:release=120,{voice_pad}[va];"
                     "[2:a]highpass=f=80,lowpass=f=14000,volume=0.16[ma];"
                     "[ma][va]sidechaincompress=threshold=0.03:ratio=10:attack=15:release=250[ducked];"
                     "[va][ducked]amix=inputs=2:duration=first:normalize=0[a]"
                 ),
-                "-map",
-                "[v]",
-                "-map",
-                "[a]",
+                "-map", "0:v",
+                "-map", "[a]",
             ]
         )
     else:
@@ -307,15 +332,12 @@ def assemble_video(
             [
                 "-filter_complex",
                 (
-                    f"[0:v]{vf}[v];"
-                    "[1:a]loudnorm=I=-16:LRA=11:TP=-1.5,acompressor=threshold=-18dB:ratio=2.5:attack=5:release=120[va];"
+                    f"[1:a]acompressor=threshold=-18dB:ratio=2.5:attack=5:release=120,{voice_pad}[va];"
                     "[2:a]lowpass=f=1800,highpass=f=90,volume=0.07[ba];"
                     "[va][ba]amix=inputs=2:duration=first:normalize=0[a]"
                 ),
-                "-map",
-                "[v]",
-                "-map",
-                "[a]",
+                "-map", "0:v",
+                "-map", "[a]",
             ]
         )
 
@@ -324,11 +346,7 @@ def assemble_video(
             "-t",
             f"{final_duration:.2f}",
             "-c:v",
-            "libx264",
-            "-preset",
-            FFMPEG_PRESET,
-            "-crf",
-            FFMPEG_CRF,
+            "copy",
             "-c:a",
             "aac",
             "-b:a",
@@ -336,6 +354,8 @@ def assemble_video(
             str(output_path),
         ]
     )
+    # Log the full final command for debugging subtitle/audio issues.
+    print(f"[FFMPEG FINAL] {' '.join(cmd)}")
     _run(cmd)
 
     meta_path = output_path.with_suffix(".json")
