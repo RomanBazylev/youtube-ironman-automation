@@ -138,7 +138,10 @@ def _search_pixabay(query: str, per_page: int = 10, orientation: str = "portrait
         )
         response.raise_for_status()
     except requests.RequestException as e:
-        print(f"[STOCK] Pixabay request failed for '{query}': {e}")
+        safe_msg = str(e)
+        if PIXABAY_API_KEY:
+            safe_msg = safe_msg.replace(PIXABAY_API_KEY, "***")
+        print(f"[STOCK] Pixabay request failed for '{query}': {safe_msg}")
         return []
     hits = response.json().get("hits", [])
 
