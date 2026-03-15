@@ -18,6 +18,9 @@ on:
         required: false
         default: "public"
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: false
