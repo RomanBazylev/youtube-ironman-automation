@@ -82,6 +82,13 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: ${{ runner.os }}-pip-
+
       - name: Install ffmpeg and fonts
         run: |
           sudo apt-get update
@@ -102,3 +109,7 @@ jobs:
           if [ -z "$TYPE" ]; then TYPE=auto; fi
           if [ -z "$PRIVACY" ]; then PRIVACY=public; fi
           python -m pipeline.generate_video --video-type "$TYPE" --count "$COUNT" --privacy-status "$PRIVACY"
+
+      - name: Cleanup build files
+        if: always()
+        run: rm -rf build/ output/ temp/
