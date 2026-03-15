@@ -41,6 +41,26 @@ def generate_scene_prompts(script: str, video_type: str) -> List[Dict[str, str |
         "man cold shower water face",
         "lion walking powerful majestic",
         "wolf lone dark forest",
+        # Wealth & success
+        "sports car dark garage",
+        "luxury watch closeup dark",
+        "stock market charts screen dark",
+        "man typing laptop late night",
+        "cash money dark background",
+        "penthouse city view night",
+        # Nature & power
+        "eagle flying mountains dramatic",
+        "storm clouds lightning dark sky",
+        "waterfall jungle powerful flow",
+        "dark road ahead foggy",
+        "sunrise over mountains golden",
+        "man walking desert alone heat",
+        # Historical / warrior
+        "ancient warrior statue dark",
+        "samurai sword dark background",
+        "roman colosseum dramatic sky",
+        "spartan helmet dark cinematic",
+        "old library books dark moody",
     ]
 
     # Shuffle visuals so consecutive videos look different.

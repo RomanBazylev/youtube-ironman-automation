@@ -7,6 +7,7 @@ from src.llm_client import chat_json
 
 
 FALLBACK_TOPICS = [
+    # Classic pillars
     "male psychology",
     "discipline",
     "self improvement",
@@ -22,6 +23,57 @@ FALLBACK_TOPICS = [
     "accountability",
     "financial discipline",
     "silent leadership",
+    # Money & career
+    "building wealth from zero",
+    "side hustle mindset",
+    "investing for beginners",
+    "negotiation skills",
+    "quitting a dead-end job",
+    "passive income strategies",
+    "the psychology of money",
+    "lessons from billionaires",
+    # Health & body
+    "cold exposure and mental toughness",
+    "sleep optimization for peak performance",
+    "training like a warrior",
+    "nutrition for sharp thinking",
+    "testosterone and lifestyle",
+    "the power of fasting",
+    # Relationships & social
+    "how strong men handle conflict",
+    "boundaries in relationships",
+    "what high-quality women look for",
+    "how to earn respect without speaking",
+    "body language of powerful men",
+    "the art of walking away",
+    "being a better father",
+    # History & philosophy
+    "Marcus Aurelius and modern leadership",
+    "lessons from Spartans",
+    "samurai principles for modern men",
+    "Miyamoto Musashi's Book of Five Rings",
+    "lessons from military generals",
+    "ancient Greek ideas about manhood",
+    "Nietzsche's will to power",
+    "Sun Tzu's Art of War for daily life",
+    # Mindset & psychology
+    "why comfort is killing you",
+    "the danger of comparison",
+    "how to stop overthinking",
+    "dealing with toxic people",
+    "fear of failure vs fear of mediocrity",
+    "the power of solitude",
+    "delayed gratification and success",
+    "reprogramming your subconscious mind",
+    # Real-world stories
+    "how David Goggins transformed himself",
+    "Elon Musk's insane work ethic",
+    "Jocko Willink on extreme ownership",
+    "how Kobe Bryant outworked everyone",
+    "Arnold Schwarzenegger's 6 rules of success",
+    "Mike Tyson on discipline and fear",
+    "lessons from Navy SEAL training",
+    "how Floyd Mayweather built an empire",
 ]
 
 FALLBACK_HOOKS = [
@@ -35,6 +87,16 @@ FALLBACK_HOOKS = [
     "The dark truth about comfort zones.",
     "Why average men stay average forever.",
     "Stop doing this and your life changes in 30 days.",
+    "Your bank account reflects your discipline.",
+    "This is why you are always tired.",
+    "The strongest men in history all did this.",
+    "Most men quit right before the breakthrough.",
+    "One cold shower taught me more than 4 years of college.",
+    "The silent habit that builds empires.",
+    "Rich men never say this out loud.",
+    "A lion does not lose sleep over the opinions of sheep.",
+    "Your morning routine is either building you or breaking you.",
+    "Loneliness is not the problem. Weakness is.",
 ]
 
 ANGLES = [
@@ -142,10 +204,15 @@ def _one_idea(force_type: str | None = None) -> Dict[str, str]:
         "Generate one viral faceless commentary YouTube idea in JSON with keys: "
         "title, hook, topic, video_type. video_type must be 'short' or 'normal'. "
         "Themes: male psychology, discipline, self improvement, stoicism, "
-        "mental toughness, success mindset.\n\n"
+        "mental toughness, success mindset, wealth building, health optimization, "
+        "ancient wisdom, famous leaders, relationship dynamics, productivity.\n\n"
         f"ANGLE: {angle}\n"
         f"FORMAT: {fmt}\n"
         f"TARGET AUDIENCE: {audience}\n\n"
+        "IMPORTANT: Make the topic UNIQUE and SPECIFIC. Avoid generic titles like "
+        "'7 Brutal Truths'. Instead use specific references: a real person, a real "
+        "study, a specific number, a concrete habit. Example: 'Marcus Aurelius Knew "
+        "This at 17' or 'The 5AM Habit That Made Kobe Unstoppable'.\n"
         "Make the title and hook uniquely match this angle, format, and audience. "
         "Be provocative but safe for YouTube."
     )

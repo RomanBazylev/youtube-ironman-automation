@@ -6,6 +6,8 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
+import requests
+
 # Allow running as file path (python pipeline/generate_video.py) in CI/local.
 ROOT_DIR = Path(__file__).resolve().parents[1]
 if str(ROOT_DIR) not in sys.path:
@@ -31,10 +33,34 @@ from src.youtube_uploader import get_recent_video_titles, publish_video, set_thu
 
 
 def _pick_music() -> Path | None:
+    """Pick a random music file, downloading one if the library is empty."""
     if not MUSIC_DIR.exists():
-        return None
+        MUSIC_DIR.mkdir(parents=True, exist_ok=True)
     files = [p for p in MUSIC_DIR.iterdir() if p.suffix.lower() in {".mp3", ".wav", ".m4a"}]
-    return random.choice(files) if files else None
+    if files:
+        return random.choice(files)
+
+    # Auto-download a CC-licensed dark/ambient track
+    _CC_TRACKS = [
+        ("dark_ambient_01.mp3", "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Komiku/Its_time_for_adventure/Komiku_-_05_-_Friends.mp3"),
+        ("ambient_02.mp3", "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Podington_Bear/Daydream/Podington_Bear_-_Daydream.mp3"),
+        ("cinematic_03.mp3", "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Chad_Crouch/Arps/Chad_Crouch_-_Shipping_Lanes.mp3"),
+        ("acoustic_04.mp3", "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Lobo_Loco/Folkish_things/Lobo_Loco_-_01_-_Acoustic_Dreams_ID_1199.mp3"),
+    ]
+    name, url = random.choice(_CC_TRACKS)
+    dest = MUSIC_DIR / name
+    try:
+        print(f"[MUSIC] Downloading background track: {name}")
+        r = requests.get(url, stream=True, timeout=120)
+        r.raise_for_status()
+        with dest.open("wb") as f:
+            for chunk in r.iter_content(chunk_size=32768):
+                if chunk:
+                    f.write(chunk)
+        return dest
+    except Exception as exc:
+        print(f"[WARN] Music download failed: {exc}")
+        return None
 
 
 def _normalize_privacy_status(value: str) -> str:
