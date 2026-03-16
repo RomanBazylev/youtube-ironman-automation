@@ -235,7 +235,15 @@ def _one_idea(force_type: str | None = None) -> Dict[str, str]:
         }
     except Exception:
         fallback_type = force_type if force_type in {"short", "normal"} else "short"
-        topic = random.choice(FALLBACK_TOPICS)
+        try:
+            from analytics import get_topic_weights
+            weights = get_topic_weights(FALLBACK_TOPICS)
+            if weights:
+                topic = random.choices(FALLBACK_TOPICS, weights=weights, k=1)[0]
+            else:
+                topic = random.choice(FALLBACK_TOPICS)
+        except Exception:
+            topic = random.choice(FALLBACK_TOPICS)
         return {
             "title": "7 Brutal Truths Weak Men Avoid",
             "hook": random.choice(FALLBACK_HOOKS),

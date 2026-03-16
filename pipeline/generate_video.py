@@ -138,6 +138,12 @@ def generate_single_video(force_type: str | None = None, privacy_status: str = "
         )
 
         try:
+            from analytics import log_upload
+            log_upload(video_id, script_pack["seo_title"], idea["topic"], script_pack.get("tags", []))
+        except Exception as exc:
+            print(f"[WARN] Analytics log failed: {exc}")
+
+        try:
             set_thumbnail(video_id=video_id, thumbnail_path=thumb_path)
         except Exception as e:
             print(f"[WARN] Thumbnail step failed, continuing: {e}")

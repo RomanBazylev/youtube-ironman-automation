@@ -29,6 +29,8 @@ jobs:
   generate:
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    permissions:
+      contents: write
     env:
       GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
       GROQ_MODEL: llama-3.3-70b-versatile
@@ -100,6 +102,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Collect video stats
+        run: python -c "from analytics import fetch_and_update_stats, print_report; fetch_and_update_stats(); print_report()"
+
       - name: Run pipeline
         run: |
           COUNT="${{ github.event.inputs.count }}"
@@ -113,3 +118,11 @@ jobs:
       - name: Cleanup build files
         if: always()
         run: rm -rf build/ output/ temp/
+
+      - name: Commit performance data
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add performance_log.json || true
+          git diff --cached --quiet || (git commit -m "analytics: update performance data" && git push)
