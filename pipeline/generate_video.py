@@ -47,20 +47,24 @@ def _pick_music() -> Path | None:
         ("cinematic_03.mp3", "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Chad_Crouch/Arps/Chad_Crouch_-_Shipping_Lanes.mp3"),
         ("acoustic_04.mp3", "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Lobo_Loco/Folkish_things/Lobo_Loco_-_01_-_Acoustic_Dreams_ID_1199.mp3"),
     ]
-    name, url = random.choice(_CC_TRACKS)
-    dest = MUSIC_DIR / name
-    try:
-        print(f"[MUSIC] Downloading background track: {name}")
-        r = requests.get(url, stream=True, timeout=120)
-        r.raise_for_status()
-        with dest.open("wb") as f:
-            for chunk in r.iter_content(chunk_size=32768):
-                if chunk:
-                    f.write(chunk)
-        return dest
-    except Exception as exc:
-        print(f"[WARN] Music download failed: {exc}")
-        return None
+    for name, url in random.sample(_CC_TRACKS, len(_CC_TRACKS)):
+        dest = MUSIC_DIR / name
+        try:
+            print(f"[MUSIC] Downloading background track: {name}")
+            r = requests.get(url, stream=True, timeout=120)
+            r.raise_for_status()
+            with dest.open("wb") as f:
+                for chunk in r.iter_content(chunk_size=32768):
+                    if chunk:
+                        f.write(chunk)
+            return dest
+        except Exception as exc:
+            print(f"[WARN] Music download failed ({name}): {exc}")
+            if dest.exists():
+                dest.unlink()
+            continue
+    print("[WARN] All music downloads failed — using ffmpeg pink noise fallback")
+    return None
 
 
 def _normalize_privacy_status(value: str) -> str:
