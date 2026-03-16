@@ -1,0 +1,82 @@
+name: Generate Long-Form Video
+
+on:
+  schedule:
+    - cron: "0 6 * * 1,3,5"  # Mon/Wed/Fri at 06:00 UTC
+  workflow_dispatch:
+    inputs:
+      privacy_status:
+        description: "public, private or unlisted"
+        required: false
+        default: "public"
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+concurrency:
+  group: longform-${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: write
+    env:
+      GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+      GROQ_MODEL: llama-3.3-70b-versatile
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      OPENAI_MODEL: gpt-4o-mini
+      PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+      PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+      YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+      YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+      YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: ${{ runner.os }}-pip-
+
+      - name: Install ffmpeg and fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-liberation fonts-dejavu-core
+          fc-cache -f -v
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Collect video stats
+        run: python -c "from analytics import fetch_and_update_stats, print_report; fetch_and_update_stats(); print_report()"
+
+      - name: Generate longform video
+        run: |
+          PRIVACY="${{ github.event.inputs.privacy_status }}"
+          if [ -z "$PRIVACY" ]; then PRIVACY=public; fi
+          python -m pipeline.generate_video --video-type longform --count 1 --privacy-status "$PRIVACY"
+
+      - name: Cleanup build files
+        if: always()
+        run: rm -rf build/ output/ temp/
+
+      - name: Commit performance data
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add performance_log.json || true
+          git diff --cached --quiet || (git commit -m "analytics: update performance data" && git push)

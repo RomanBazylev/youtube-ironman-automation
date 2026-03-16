@@ -44,6 +44,16 @@ VIDEO_SPECS = {
         min_words=120,
         max_words=250,
     ),
+    "longform": VideoSpec(
+        video_type="longform",
+        width=1280,
+        height=720,
+        fps=30,
+        min_duration_s=480,
+        max_duration_s=720,
+        min_words=1500,
+        max_words=2200,
+    ),
 }
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")

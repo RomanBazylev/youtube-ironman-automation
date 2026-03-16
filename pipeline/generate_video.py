@@ -78,7 +78,7 @@ def _normalize_privacy_status(value: str) -> str:
 def generate_single_video(force_type: str | None = None, privacy_status: str = "public") -> dict:
     ensure_build_dirs()
 
-    resolved_video_type = force_type if force_type in {"short", "normal"} else random.choice(["short", "normal"])
+    resolved_video_type = force_type if force_type in {"short", "normal", "longform"} else random.choice(["short", "normal"])
     privacy_status = _normalize_privacy_status(privacy_status)
 
     try:
@@ -190,7 +190,7 @@ def generate_multiple_videos(
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--video-type", choices=["auto", "short", "normal"], default="auto")
+    parser.add_argument("--video-type", choices=["auto", "short", "normal", "longform"], default="auto")
     parser.add_argument("--privacy-status", choices=["public", "private", "unlisted"], default="public")
     parser.add_argument("--count", type=int, default=1)
     args = parser.parse_args()

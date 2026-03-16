@@ -76,6 +76,40 @@ FALLBACK_TOPICS = [
     "how Floyd Mayweather built an empire",
 ]
 
+LONGFORM_TOPICS = [
+    # Real transformation stories
+    "How David Goggins went from 300 lbs exterminator to Navy SEAL",
+    "Arnold Schwarzenegger's journey from Austrian village to Hollywood legend",
+    "Kobe Bryant's Mamba Mentality — the full story behind the obsession",
+    "Jocko Willink and the Battle of Ramadi — leadership forged in combat",
+    "How Mike Tyson became the youngest heavyweight champion at 20",
+    "Elon Musk's path from bullied kid in South Africa to Mars visionary",
+    "Marcus Aurelius — the philosopher emperor who ruled during plague",
+    "How Miyamoto Musashi won 61 duels and wrote the Book of Five Rings",
+    "The rise and fall and rise of Floyd Mayweather",
+    "How Nelson Mandela spent 27 years in prison and emerged a leader",
+    "Nikola Tesla's tragic genius — the man who lit the world",
+    "Bruce Lee's philosophy — be water and the art of no limitation",
+    "How Andrew Carnegie went from factory boy to richest man alive",
+    "Theodore Roosevelt — the sickly boy who became the toughest president",
+    "The Spartan 300 — what really happened at Thermopylae",
+    "How Alexander the Great conquered the known world by age 30",
+    "Genghis Khan — from orphaned outcast to ruler of the largest empire",
+    "How Keanu Reeves handled tragedy and became Hollywood's most loved",
+    "The untold story of Dwayne Johnson's depression and comeback",
+    "How Jim Carrey went from living in a van to $20 million per film",
+    "Steve Jobs fired from his own company — and how he came back stronger",
+    "How Michael Jordan used failure as fuel for 6 championships",
+    "Conor McGregor — from plumber on welfare to UFC double champion",
+    "How Goggins ran 100 miles with broken feet — and what it teaches",
+    "The philosophy of Seneca — wealth, exile, and Stoic mastery",
+    "How Walt Disney was fired for lacking imagination then built an empire",
+    "The complete story of Navy SEAL Hell Week — who survives and why",
+    "Viktor Frankl — finding meaning in Auschwitz concentration camp",
+    "How Cristiano Ronaldo's obsessive work ethic made him the GOAT",
+    "The samurai code of Bushido — 7 virtues that built warriors",
+]
+
 FALLBACK_HOOKS = [
     "Weak men ignore this until it destroys them.",
     "The truth about discipline nobody wants to hear.",
@@ -217,6 +251,24 @@ def _one_idea(force_type: str | None = None) -> Dict[str, str]:
         "Be provocative but safe for YouTube."
     )
 
+    if force_type == "longform":
+        lf_topic = random.choice(LONGFORM_TOPICS)
+        prompt = (
+            "Generate one viral long-form faceless commentary YouTube idea in JSON "
+            "with keys: title, hook, topic, video_type. video_type MUST be 'longform'.\n"
+            "This is an 8-12 minute deep-dive video about a real person's journey, "
+            "transformation, or philosophy.\n\n"
+            f"TOPIC SEED: {lf_topic}\n"
+            f"ANGLE: {angle}\n"
+            f"TARGET AUDIENCE: {audience}\n\n"
+            "RULES:\n"
+            "- Title must be compelling, specific, and include the person's name.\n"
+            "- Hook must be a single shocking sentence that stops the viewer.\n"
+            "- Topic must be a SPECIFIC real story, not generic advice.\n"
+            "- Think of this as a mini-documentary narration, not a motivational clip.\n"
+            "Be provocative but safe for YouTube."
+        )
+
     try:
         raw = chat_json(
             system_prompt="You generate viral but safe YouTube faceless commentary ideas.",
@@ -225,7 +277,7 @@ def _one_idea(force_type: str | None = None) -> Dict[str, str]:
         )
         obj = json.loads(raw)
         video_type = (force_type or obj.get("video_type", "short")).lower()
-        if video_type not in {"short", "normal"}:
+        if video_type not in {"short", "normal", "longform"}:
             video_type = "short"
         return {
             "title": obj.get("title", "7 Brutal Truths Weak Men Avoid").strip(),
@@ -234,16 +286,17 @@ def _one_idea(force_type: str | None = None) -> Dict[str, str]:
             "video_type": video_type,
         }
     except Exception:
-        fallback_type = force_type if force_type in {"short", "normal"} else "short"
+        fallback_type = force_type if force_type in {"short", "normal", "longform"} else "short"
+        topics = LONGFORM_TOPICS if fallback_type == "longform" else FALLBACK_TOPICS
         try:
             from analytics import get_topic_weights
-            weights = get_topic_weights(FALLBACK_TOPICS)
+            weights = get_topic_weights(topics)
             if weights:
-                topic = random.choices(FALLBACK_TOPICS, weights=weights, k=1)[0]
+                topic = random.choices(topics, weights=weights, k=1)[0]
             else:
-                topic = random.choice(FALLBACK_TOPICS)
+                topic = random.choice(topics)
         except Exception:
-            topic = random.choice(FALLBACK_TOPICS)
+            topic = random.choice(topics)
         return {
             "title": "7 Brutal Truths Weak Men Avoid",
             "hook": random.choice(FALLBACK_HOOKS),

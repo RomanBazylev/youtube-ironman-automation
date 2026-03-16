@@ -7,24 +7,47 @@ from src.llm_client import chat_json
 def generate_script(idea: Dict[str, str]) -> Dict[str, str]:
     video_type = idea["video_type"]
     spec = VIDEO_SPECS[video_type]
-    prompt = (
-        "Return JSON with keys: script, seo_title, seo_description, tags.\n"
-        f"Script length: exactly {spec.min_words}-{spec.max_words} words.\n"
-        "Channel style: masculine, direct, motivational commentary for men.\n"
-        "Script rules:\n"
-        "- First sentence MUST be a provocative hook that stops the scroll.\n"
-        "- Use short punchy sentences. Max 12 words per sentence.\n"
-        "- One idea per sentence. No filler words.\n"
-        "- Speak directly to 'you'. Be commanding, not preachy.\n"
-        "- Include concrete examples: wake up at 5am, cold shower, gym at 6.\n"
-        "- End with a strong call-to-action: follow, save, share.\n"
-        "- Tone: confident, calm authority. Like a mentor, not a drill sergeant.\n"
-        "- NO emojis, NO hashtags in the script, NO questions.\n"
-        f"Topic: {idea['topic']}. Hook seed: {idea['hook']}.\n"
-        "seo_title: max 70 chars, clickbait but honest. Include power words.\n"
-        "seo_description: 2-3 sentences summarizing the message.\n"
-        "tags: list of 8-12 relevant single-word or two-word tags."
-    )
+
+    if video_type == "longform":
+        prompt = (
+            "Return JSON with keys: script, seo_title, seo_description, tags.\n"
+            f"Script length: exactly {spec.min_words}-{spec.max_words} words.\n"
+            "Channel style: masculine, authoritative narrator — like a documentary.\n"
+            "Script rules:\n"
+            "- This is an 8-12 minute deep-dive video about a real person or philosophy.\n"
+            "- Structure: Hook (shocking opening) → Origin (early life/background) → "
+            "Struggle (failures, setbacks) → Turning Point (key moment) → Rise "
+            "(achievements, transformation) → Lessons (what we can learn) → Outro.\n"
+            "- Use short punchy sentences. Max 15 words per sentence.\n"
+            "- Include specific dates, numbers, quotes from the person.\n"
+            "- Build tension and narrative arc — this is storytelling, not advice.\n"
+            "- Speak directly to 'you' only in the lessons section.\n"
+            "- Tone: serious, cinematic, respectful but intense.\n"
+            "- NO emojis, NO hashtags in script.\n"
+            f"Topic: {idea['topic']}. Hook seed: {idea['hook']}.\n"
+            "seo_title: max 70 chars, compelling and includes person's name.\n"
+            "seo_description: 3-4 sentences about the story. Include 'full story'.\n"
+            "tags: list of 10-15 relevant tags including person's name."
+        )
+    else:
+        prompt = (
+            "Return JSON with keys: script, seo_title, seo_description, tags.\n"
+            f"Script length: exactly {spec.min_words}-{spec.max_words} words.\n"
+            "Channel style: masculine, direct, motivational commentary for men.\n"
+            "Script rules:\n"
+            "- First sentence MUST be a provocative hook that stops the scroll.\n"
+            "- Use short punchy sentences. Max 12 words per sentence.\n"
+            "- One idea per sentence. No filler words.\n"
+            "- Speak directly to 'you'. Be commanding, not preachy.\n"
+            "- Include concrete examples: wake up at 5am, cold shower, gym at 6.\n"
+            "- End with a strong call-to-action: follow, save, share.\n"
+            "- Tone: confident, calm authority. Like a mentor, not a drill sergeant.\n"
+            "- NO emojis, NO hashtags in the script, NO questions.\n"
+            f"Topic: {idea['topic']}. Hook seed: {idea['hook']}.\n"
+            "seo_title: max 70 chars, clickbait but honest. Include power words.\n"
+            "seo_description: 2-3 sentences summarizing the message.\n"
+            "tags: list of 8-12 relevant single-word or two-word tags."
+        )
 
     if not GROQ_API_KEY and not OPENAI_API_KEY:
         script = (
