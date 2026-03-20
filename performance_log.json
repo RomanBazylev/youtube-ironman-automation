@@ -14,7 +14,7 @@
         "views": 1286,
         "likes": 26,
         "comments": 1,
-        "fetched_at": "2026-03-20T18:54:23.778881+00:00"
+        "fetched_at": "2026-03-20T21:33:23.125547+00:00"
       }
     },
     {
@@ -31,7 +31,7 @@
         "views": 407,
         "likes": 1,
         "comments": 0,
-        "fetched_at": "2026-03-20T18:54:23.778881+00:00"
+        "fetched_at": "2026-03-20T21:33:23.125547+00:00"
       }
     },
     {
@@ -45,10 +45,10 @@
       ],
       "uploaded_at": "2026-03-16T16:09:18.166598+00:00",
       "stats": {
-        "views": 853,
+        "views": 851,
         "likes": 9,
         "comments": 0,
-        "fetched_at": "2026-03-20T18:54:23.778881+00:00"
+        "fetched_at": "2026-03-20T21:33:23.125547+00:00"
       }
     },
     {
@@ -65,7 +65,7 @@
         "views": 0,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-03-20T18:54:23.778881+00:00"
+        "fetched_at": "2026-03-20T21:33:23.125547+00:00"
       }
     },
     {
@@ -82,7 +82,7 @@
         "views": 0,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-03-20T18:54:23.778881+00:00"
+        "fetched_at": "2026-03-20T21:33:23.125547+00:00"
       }
     },
     {
@@ -99,7 +99,7 @@
         "views": 746,
         "likes": 10,
         "comments": 0,
-        "fetched_at": "2026-03-20T18:54:23.778881+00:00"
+        "fetched_at": "2026-03-20T21:33:23.125547+00:00"
       }
     },
     {
@@ -123,7 +123,7 @@
         "views": 0,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-03-20T18:54:23.778881+00:00"
+        "fetched_at": "2026-03-20T21:33:23.125547+00:00"
       }
     },
     {
@@ -147,7 +147,7 @@
         "views": 0,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-03-20T18:54:23.778881+00:00"
+        "fetched_at": "2026-03-20T21:33:23.125547+00:00"
       }
     },
     {
@@ -164,7 +164,7 @@
         "views": 142,
         "likes": 2,
         "comments": 0,
-        "fetched_at": "2026-03-20T18:54:23.778881+00:00"
+        "fetched_at": "2026-03-20T21:33:23.125547+00:00"
       }
     },
     {
@@ -178,10 +178,10 @@
       ],
       "uploaded_at": "2026-03-17T09:59:39.812460+00:00",
       "stats": {
-        "views": 863,
+        "views": 865,
         "likes": 2,
         "comments": 0,
-        "fetched_at": "2026-03-20T18:54:23.778881+00:00"
+        "fetched_at": "2026-03-20T21:33:23.125547+00:00"
       }
     },
     {
@@ -198,7 +198,7 @@
         "views": 0,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-03-20T18:54:23.778881+00:00"
+        "fetched_at": "2026-03-20T21:33:23.125547+00:00"
       }
     },
     {
@@ -215,7 +215,7 @@
         "views": 0,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-03-20T18:54:23.778881+00:00"
+        "fetched_at": "2026-03-20T21:33:23.125547+00:00"
       }
     },
     {
@@ -229,10 +229,10 @@
       ],
       "uploaded_at": "2026-03-20T10:21:03.766061+00:00",
       "stats": {
-        "views": 88,
-        "likes": 2,
+        "views": 129,
+        "likes": 3,
         "comments": 0,
-        "fetched_at": "2026-03-20T18:54:23.778881+00:00"
+        "fetched_at": "2026-03-20T21:33:23.125547+00:00"
       }
     },
     {
@@ -249,7 +249,7 @@
         "views": 0,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-03-20T18:54:23.778881+00:00"
+        "fetched_at": "2026-03-20T21:33:23.125547+00:00"
       }
     },
     {
@@ -263,10 +263,10 @@
       ],
       "uploaded_at": "2026-03-20T13:06:48.308291+00:00",
       "stats": {
-        "views": 325,
-        "likes": 6,
+        "views": 563,
+        "likes": 9,
         "comments": 0,
-        "fetched_at": "2026-03-20T18:54:23.778881+00:00"
+        "fetched_at": "2026-03-20T21:33:23.125547+00:00"
       }
     },
     {
@@ -280,10 +280,10 @@
       ],
       "uploaded_at": "2026-03-20T15:46:46.676823+00:00",
       "stats": {
-        "views": 13,
+        "views": 61,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-03-20T18:54:23.778881+00:00"
+        "fetched_at": "2026-03-20T21:33:23.125547+00:00"
       }
     },
     {
@@ -303,6 +303,30 @@
         "Overcoming Adversity"
       ],
       "uploaded_at": "2026-03-20T18:56:16.555709+00:00",
+      "stats": {
+        "views": 0,
+        "likes": 0,
+        "comments": 0,
+        "fetched_at": "2026-03-20T21:33:23.125547+00:00"
+      }
+    },
+    {
+      "video_id": "z7JOl1kwAT0",
+      "title": "Raise Strong Sons",
+      "topic": "The unique morning routine of Nelson Mandela and how it relates to discipline and fatherhood",
+      "tags": [
+        "Morning Routine",
+        "Discipline",
+        "Fatherhood",
+        "Nelson Mandela",
+        "Resilience",
+        "Strength",
+        "Motivation",
+        "Personal Growth",
+        "Leadership",
+        "Manhood"
+      ],
+      "uploaded_at": "2026-03-20T21:35:12.168204+00:00",
       "stats": null
     }
   ]
