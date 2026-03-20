@@ -10,7 +10,12 @@
         "mentalstrength"
       ],
       "uploaded_at": "2026-03-16T10:10:03.683840+00:00",
-      "stats": null
+      "stats": {
+        "views": 1286,
+        "likes": 26,
+        "comments": 1,
+        "fetched_at": "2026-03-20T10:19:11.545328+00:00"
+      }
     },
     {
       "video_id": "BpQ2FL0Q4ws",
@@ -22,7 +27,12 @@
         "mentalstrength"
       ],
       "uploaded_at": "2026-03-16T13:20:41.286815+00:00",
-      "stats": null
+      "stats": {
+        "views": 408,
+        "likes": 1,
+        "comments": 0,
+        "fetched_at": "2026-03-20T10:19:11.545328+00:00"
+      }
     },
     {
       "video_id": "Xg7D5wDzaNo",
@@ -34,7 +44,12 @@
         "mentalstrength"
       ],
       "uploaded_at": "2026-03-16T16:09:18.166598+00:00",
-      "stats": null
+      "stats": {
+        "views": 853,
+        "likes": 9,
+        "comments": 0,
+        "fetched_at": "2026-03-20T10:19:11.545328+00:00"
+      }
     },
     {
       "video_id": "8wOiitr_upI",
@@ -46,7 +61,12 @@
         "mentalstrength"
       ],
       "uploaded_at": "2026-03-16T19:07:00.876527+00:00",
-      "stats": null
+      "stats": {
+        "views": 0,
+        "likes": 0,
+        "comments": 0,
+        "fetched_at": "2026-03-20T10:19:11.545328+00:00"
+      }
     },
     {
       "video_id": "rTKXmcQjcZQ",
@@ -58,7 +78,12 @@
         "mentalstrength"
       ],
       "uploaded_at": "2026-03-16T21:44:12.670628+00:00",
-      "stats": null
+      "stats": {
+        "views": 0,
+        "likes": 0,
+        "comments": 0,
+        "fetched_at": "2026-03-20T10:19:11.545328+00:00"
+      }
     },
     {
       "video_id": "jkUEY2T07FE",
@@ -70,7 +95,12 @@
         "mentalstrength"
       ],
       "uploaded_at": "2026-03-17T02:24:55.216047+00:00",
-      "stats": null
+      "stats": {
+        "views": 749,
+        "likes": 10,
+        "comments": 0,
+        "fetched_at": "2026-03-20T10:19:11.545328+00:00"
+      }
     },
     {
       "video_id": "tuDNrdPSmLY",
@@ -89,7 +119,12 @@
         "Self Improvement"
       ],
       "uploaded_at": "2026-03-17T04:55:52.864681+00:00",
-      "stats": null
+      "stats": {
+        "views": 0,
+        "likes": 0,
+        "comments": 0,
+        "fetched_at": "2026-03-20T10:19:11.545328+00:00"
+      }
     },
     {
       "video_id": "hCyFgfMLzd4",
@@ -108,7 +143,12 @@
         "productivity"
       ],
       "uploaded_at": "2026-03-17T07:09:36.610339+00:00",
-      "stats": null
+      "stats": {
+        "views": 0,
+        "likes": 0,
+        "comments": 0,
+        "fetched_at": "2026-03-20T10:19:11.545328+00:00"
+      }
     },
     {
       "video_id": "Uc0WgdzAwK0",
@@ -120,7 +160,12 @@
         "mentalstrength"
       ],
       "uploaded_at": "2026-03-17T09:19:29.040246+00:00",
-      "stats": null
+      "stats": {
+        "views": 142,
+        "likes": 2,
+        "comments": 0,
+        "fetched_at": "2026-03-20T10:19:11.545328+00:00"
+      }
     },
     {
       "video_id": "Y6b0c3Ou33Y",
@@ -132,7 +177,12 @@
         "mentalstrength"
       ],
       "uploaded_at": "2026-03-17T09:59:39.812460+00:00",
-      "stats": null
+      "stats": {
+        "views": 812,
+        "likes": 2,
+        "comments": 0,
+        "fetched_at": "2026-03-20T10:19:11.545328+00:00"
+      }
     },
     {
       "video_id": "xyc5w3rxlsA",
@@ -144,7 +194,12 @@
         "mentalstrength"
       ],
       "uploaded_at": "2026-03-17T12:14:46.567684+00:00",
-      "stats": null
+      "stats": {
+        "views": 0,
+        "likes": 0,
+        "comments": 0,
+        "fetched_at": "2026-03-20T10:19:11.545328+00:00"
+      }
     },
     {
       "video_id": "VWfki7nCpcE",
@@ -156,6 +211,23 @@
         "mentalstrength"
       ],
       "uploaded_at": "2026-03-17T13:19:27.593465+00:00",
+      "stats": {
+        "views": 0,
+        "likes": 0,
+        "comments": 0,
+        "fetched_at": "2026-03-20T10:19:11.545328+00:00"
+      }
+    },
+    {
+      "video_id": "aDwvz2Fgqgc",
+      "title": "Kobe Bryant's Darkest Hour: Uncovering the Ruthless Truth Behind the Mamba Mentality",
+      "topic": "The untold story of how Kobe Bryant transformed his career and legacy after a near-career-ending injury, leveraging pain and adversity to forge the Mamba Mentality",
+      "tags": [
+        "discipline",
+        "selfimprovement",
+        "mentalstrength"
+      ],
+      "uploaded_at": "2026-03-20T10:20:37.010643+00:00",
       "stats": null
     }
   ]
