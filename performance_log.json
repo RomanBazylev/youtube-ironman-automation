@@ -14,7 +14,7 @@
         "views": 1286,
         "likes": 26,
         "comments": 1,
-        "fetched_at": "2026-03-20T10:41:23.315657+00:00"
+        "fetched_at": "2026-03-20T13:05:06.760691+00:00"
       }
     },
     {
@@ -28,10 +28,10 @@
       ],
       "uploaded_at": "2026-03-16T13:20:41.286815+00:00",
       "stats": {
-        "views": 408,
+        "views": 407,
         "likes": 1,
         "comments": 0,
-        "fetched_at": "2026-03-20T10:41:23.315657+00:00"
+        "fetched_at": "2026-03-20T13:05:06.760691+00:00"
       }
     },
     {
@@ -48,7 +48,7 @@
         "views": 853,
         "likes": 9,
         "comments": 0,
-        "fetched_at": "2026-03-20T10:41:23.315657+00:00"
+        "fetched_at": "2026-03-20T13:05:06.760691+00:00"
       }
     },
     {
@@ -65,7 +65,7 @@
         "views": 0,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-03-20T10:41:23.315657+00:00"
+        "fetched_at": "2026-03-20T13:05:06.760691+00:00"
       }
     },
     {
@@ -82,7 +82,7 @@
         "views": 0,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-03-20T10:41:23.315657+00:00"
+        "fetched_at": "2026-03-20T13:05:06.760691+00:00"
       }
     },
     {
@@ -96,10 +96,10 @@
       ],
       "uploaded_at": "2026-03-17T02:24:55.216047+00:00",
       "stats": {
-        "views": 749,
+        "views": 746,
         "likes": 10,
         "comments": 0,
-        "fetched_at": "2026-03-20T10:41:23.315657+00:00"
+        "fetched_at": "2026-03-20T13:05:06.760691+00:00"
       }
     },
     {
@@ -123,7 +123,7 @@
         "views": 0,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-03-20T10:41:23.315657+00:00"
+        "fetched_at": "2026-03-20T13:05:06.760691+00:00"
       }
     },
     {
@@ -147,7 +147,7 @@
         "views": 0,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-03-20T10:41:23.315657+00:00"
+        "fetched_at": "2026-03-20T13:05:06.760691+00:00"
       }
     },
     {
@@ -164,7 +164,7 @@
         "views": 142,
         "likes": 2,
         "comments": 0,
-        "fetched_at": "2026-03-20T10:41:23.315657+00:00"
+        "fetched_at": "2026-03-20T13:05:06.760691+00:00"
       }
     },
     {
@@ -178,10 +178,10 @@
       ],
       "uploaded_at": "2026-03-17T09:59:39.812460+00:00",
       "stats": {
-        "views": 852,
+        "views": 864,
         "likes": 2,
         "comments": 0,
-        "fetched_at": "2026-03-20T10:41:23.315657+00:00"
+        "fetched_at": "2026-03-20T13:05:06.760691+00:00"
       }
     },
     {
@@ -198,7 +198,7 @@
         "views": 0,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-03-20T10:41:23.315657+00:00"
+        "fetched_at": "2026-03-20T13:05:06.760691+00:00"
       }
     },
     {
@@ -215,7 +215,7 @@
         "views": 0,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-03-20T10:41:23.315657+00:00"
+        "fetched_at": "2026-03-20T13:05:06.760691+00:00"
       }
     },
     {
@@ -229,10 +229,10 @@
       ],
       "uploaded_at": "2026-03-20T10:21:03.766061+00:00",
       "stats": {
-        "views": 5,
-        "likes": 0,
+        "views": 20,
+        "likes": 2,
         "comments": 0,
-        "fetched_at": "2026-03-20T10:41:23.315657+00:00"
+        "fetched_at": "2026-03-20T13:05:06.760691+00:00"
       }
     },
     {
@@ -245,6 +245,23 @@
         "mentalstrength"
       ],
       "uploaded_at": "2026-03-20T10:42:42.401966+00:00",
+      "stats": {
+        "views": 0,
+        "likes": 0,
+        "comments": 0,
+        "fetched_at": "2026-03-20T13:05:06.760691+00:00"
+      }
+    },
+    {
+      "video_id": "u0Bu0ueJVQQ",
+      "title": "How Elon Musk's 5-Hour Morning Routine Transformed My Life",
+      "topic": "The 5-hour morning routine of high-value men like Elon Musk and how to implement it for increased productivity",
+      "tags": [
+        "discipline",
+        "selfimprovement",
+        "mentalstrength"
+      ],
+      "uploaded_at": "2026-03-20T13:06:48.308291+00:00",
       "stats": null
     }
   ]
