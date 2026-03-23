@@ -9,6 +9,8 @@ import requests
 from config.settings import PEXELS_API_KEY, PIXABAY_API_KEY
 
 
+import subprocess
+
 BLACKLIST_TERMS = {
     "woman",
     "women",
@@ -28,6 +30,20 @@ BLACKLIST_TERMS = {
     "fashion model",
 }
 MALE_PRIORITY_TERMS = {"man", "male", "men", "masculine", "gentleman", "businessman"}
+
+
+def _generate_blank_clip(path: Path, orientation: str) -> None:
+    """Generate a dark placeholder clip via ffmpeg when stock APIs return nothing."""
+    w, h = (1080, 1920) if orientation == "portrait" else (1280, 720)
+    subprocess.run(
+        [
+            "ffmpeg", "-y", "-f", "lavfi",
+            "-i", f"color=c=0x111111:s={w}x{h}:d=4:r=30",
+            "-c:v", "libx264", "-preset", "ultrafast", "-crf", "28",
+            str(path),
+        ],
+        check=True,
+    )
 
 
 def _normalize_query(text: str) -> str:
@@ -258,7 +274,11 @@ def download_clips_for_scenes(
             if result:
                 break
         if not result:
-            raise RuntimeError("No clips returned from Pexels/Pixabay")
+            print(f"[STOCK] WARNING: No clips found for scene {i}, generating blank placeholder")
+            path = output_dir / f"clip_{i:02d}.mp4"
+            _generate_blank_clip(path, orientation)
+            clips.append(path)
+            continue
 
         random.shuffle(result)
         picked = None
