@@ -115,7 +115,7 @@ async def _generate_with_word_boundaries(
     text: str, output_path: Path, voice: str, rate: str,
 ) -> List[Dict]:
     """Generate TTS and capture WordBoundary events for subtitle sync."""
-    communicate = edge_tts.Communicate(text, voice, rate=rate, boundary="WordBoundary")
+    communicate = edge_tts.Communicate(text, voice, rate=rate)
     word_events: List[Dict] = []
 
     with open(str(output_path), "wb") as f:
