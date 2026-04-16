@@ -700,7 +700,7 @@
         "views": 81,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-04-16T16:11:49.241721+00:00"
+        "fetched_at": "2026-04-16T16:24:45.310779+00:00"
       }
     },
     {
@@ -717,7 +717,7 @@
         "views": 0,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-04-16T16:11:49.241721+00:00"
+        "fetched_at": "2026-04-16T16:24:45.310779+00:00"
       }
     },
     {
@@ -730,6 +730,23 @@
         "mentalstrength"
       ],
       "uploaded_at": "2026-04-16T16:13:10.275372+00:00",
+      "stats": {
+        "views": 0,
+        "likes": 0,
+        "comments": 0,
+        "fetched_at": "2026-04-16T16:24:45.310779+00:00"
+      }
+    },
+    {
+      "video_id": "q4RWN6kijNA",
+      "title": "7 Brutal Truths Weak Men Avoid",
+      "topic": "accountability",
+      "tags": [
+        "discipline",
+        "selfimprovement",
+        "mentalstrength"
+      ],
+      "uploaded_at": "2026-04-16T16:25:55.811150+00:00",
       "stats": null
     }
   ]
