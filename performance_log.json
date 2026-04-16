@@ -697,10 +697,10 @@
       ],
       "uploaded_at": "2026-04-16T13:44:38.276394+00:00",
       "stats": {
-        "views": 273,
-        "likes": 2,
+        "views": 340,
+        "likes": 3,
         "comments": 0,
-        "fetched_at": "2026-04-16T19:19:17.585249+00:00"
+        "fetched_at": "2026-04-16T21:46:04.793031+00:00"
       }
     },
     {
@@ -717,7 +717,7 @@
         "views": 0,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-04-16T19:19:17.585249+00:00"
+        "fetched_at": "2026-04-16T21:46:04.793031+00:00"
       }
     },
     {
@@ -734,7 +734,7 @@
         "views": 0,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-04-16T19:19:17.585249+00:00"
+        "fetched_at": "2026-04-16T21:46:04.793031+00:00"
       }
     },
     {
@@ -751,7 +751,7 @@
         "views": 0,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-04-16T19:19:17.585249+00:00"
+        "fetched_at": "2026-04-16T21:46:04.793031+00:00"
       }
     },
     {
@@ -764,6 +764,23 @@
         "mentalstrength"
       ],
       "uploaded_at": "2026-04-16T19:20:50.427781+00:00",
+      "stats": {
+        "views": 0,
+        "likes": 0,
+        "comments": 0,
+        "fetched_at": "2026-04-16T21:46:04.793031+00:00"
+      }
+    },
+    {
+      "video_id": "2oxFR6lkglA",
+      "title": "7 Brutal Truths Weak Men Avoid",
+      "topic": "passive income strategies",
+      "tags": [
+        "discipline",
+        "selfimprovement",
+        "mentalstrength"
+      ],
+      "uploaded_at": "2026-04-16T21:47:49.209921+00:00",
       "stats": null
     }
   ]
