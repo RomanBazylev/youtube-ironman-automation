@@ -697,10 +697,10 @@
       ],
       "uploaded_at": "2026-04-16T13:44:38.276394+00:00",
       "stats": {
-        "views": 81,
-        "likes": 0,
+        "views": 273,
+        "likes": 2,
         "comments": 0,
-        "fetched_at": "2026-04-16T16:24:45.310779+00:00"
+        "fetched_at": "2026-04-16T19:19:17.585249+00:00"
       }
     },
     {
@@ -717,7 +717,7 @@
         "views": 0,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-04-16T16:24:45.310779+00:00"
+        "fetched_at": "2026-04-16T19:19:17.585249+00:00"
       }
     },
     {
@@ -734,7 +734,7 @@
         "views": 0,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-04-16T16:24:45.310779+00:00"
+        "fetched_at": "2026-04-16T19:19:17.585249+00:00"
       }
     },
     {
@@ -747,6 +747,23 @@
         "mentalstrength"
       ],
       "uploaded_at": "2026-04-16T16:25:55.811150+00:00",
+      "stats": {
+        "views": 0,
+        "likes": 0,
+        "comments": 0,
+        "fetched_at": "2026-04-16T19:19:17.585249+00:00"
+      }
+    },
+    {
+      "video_id": "pkKoPf1YixY",
+      "title": "7 Brutal Truths Weak Men Avoid",
+      "topic": "sleep optimization for peak performance",
+      "tags": [
+        "discipline",
+        "selfimprovement",
+        "mentalstrength"
+      ],
+      "uploaded_at": "2026-04-16T19:20:50.427781+00:00",
       "stats": null
     }
   ]
