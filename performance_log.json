@@ -697,10 +697,10 @@
       ],
       "uploaded_at": "2026-04-16T13:44:38.276394+00:00",
       "stats": {
-        "views": 340,
-        "likes": 3,
+        "views": 440,
+        "likes": 4,
         "comments": 0,
-        "fetched_at": "2026-04-16T21:46:04.793031+00:00"
+        "fetched_at": "2026-04-17T02:46:18.780792+00:00"
       }
     },
     {
@@ -717,7 +717,7 @@
         "views": 0,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-04-16T21:46:04.793031+00:00"
+        "fetched_at": "2026-04-17T02:46:18.780792+00:00"
       }
     },
     {
@@ -734,7 +734,7 @@
         "views": 0,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-04-16T21:46:04.793031+00:00"
+        "fetched_at": "2026-04-17T02:46:18.780792+00:00"
       }
     },
     {
@@ -751,7 +751,7 @@
         "views": 0,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-04-16T21:46:04.793031+00:00"
+        "fetched_at": "2026-04-17T02:46:18.780792+00:00"
       }
     },
     {
@@ -768,7 +768,7 @@
         "views": 0,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-04-16T21:46:04.793031+00:00"
+        "fetched_at": "2026-04-17T02:46:18.780792+00:00"
       }
     },
     {
@@ -781,6 +781,23 @@
         "mentalstrength"
       ],
       "uploaded_at": "2026-04-16T21:47:49.209921+00:00",
+      "stats": {
+        "views": 0,
+        "likes": 0,
+        "comments": 0,
+        "fetched_at": "2026-04-17T02:46:18.780792+00:00"
+      }
+    },
+    {
+      "video_id": "FPlot3WHP2g",
+      "title": "7 Brutal Truths Weak Men Avoid",
+      "topic": "what high-quality women look for",
+      "tags": [
+        "discipline",
+        "selfimprovement",
+        "mentalstrength"
+      ],
+      "uploaded_at": "2026-04-17T02:47:58.951423+00:00",
       "stats": null
     }
   ]
