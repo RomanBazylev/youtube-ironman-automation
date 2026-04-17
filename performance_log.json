@@ -700,7 +700,7 @@
         "views": 528,
         "likes": 5,
         "comments": 0,
-        "fetched_at": "2026-04-17T07:52:03.875337+00:00"
+        "fetched_at": "2026-04-17T07:58:17.452702+00:00"
       }
     },
     {
@@ -717,7 +717,7 @@
         "views": 0,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-04-17T07:52:03.875337+00:00"
+        "fetched_at": "2026-04-17T07:58:17.452702+00:00"
       }
     },
     {
@@ -734,7 +734,7 @@
         "views": 0,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-04-17T07:52:03.875337+00:00"
+        "fetched_at": "2026-04-17T07:58:17.452702+00:00"
       }
     },
     {
@@ -751,7 +751,7 @@
         "views": 0,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-04-17T07:52:03.875337+00:00"
+        "fetched_at": "2026-04-17T07:58:17.452702+00:00"
       }
     },
     {
@@ -768,7 +768,7 @@
         "views": 0,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-04-17T07:52:03.875337+00:00"
+        "fetched_at": "2026-04-17T07:58:17.452702+00:00"
       }
     },
     {
@@ -785,7 +785,7 @@
         "views": 0,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-04-17T07:52:03.875337+00:00"
+        "fetched_at": "2026-04-17T07:58:17.452702+00:00"
       }
     },
     {
@@ -802,7 +802,7 @@
         "views": 0,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-04-17T07:52:03.875337+00:00"
+        "fetched_at": "2026-04-17T07:58:17.452702+00:00"
       }
     },
     {
@@ -819,7 +819,7 @@
         "views": 0,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-04-17T07:52:03.875337+00:00"
+        "fetched_at": "2026-04-17T07:58:17.452702+00:00"
       }
     },
     {
@@ -832,6 +832,23 @@
         "mentalstrength"
       ],
       "uploaded_at": "2026-04-17T07:53:02.425147+00:00",
+      "stats": {
+        "views": 12,
+        "likes": 0,
+        "comments": 0,
+        "fetched_at": "2026-04-17T07:58:17.452702+00:00"
+      }
+    },
+    {
+      "video_id": "kOulPabhlTA",
+      "title": "7 Brutal Truths Weak Men Avoid",
+      "topic": "The rise and fall and rise of Floyd Mayweather",
+      "tags": [
+        "discipline",
+        "selfimprovement",
+        "mentalstrength"
+      ],
+      "uploaded_at": "2026-04-17T07:59:38.425061+00:00",
       "stats": null
     }
   ]
