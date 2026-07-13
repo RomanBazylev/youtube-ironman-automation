@@ -1,7 +1,7 @@
 import json
 import random
 import re
-from typing import Dict
+from typing import Dict, List
 
 from src.llm_client import chat_json
 
@@ -159,21 +159,29 @@ ANGLES = [
 ]
 
 FORMATS = [
-    "listicle (X rules/truths/habits)",
-    "myth vs reality",
-    "one brutal rule",
-    "before vs after mindset",
-    "day-in-the-life contrast",
-    "historical example + lesson",
-    "countdown (worst to best)",
-    "unpopular opinion deep dive",
-    "character study (fictional or real)",
-    "if-then consequences",
-    "challenge or dare format",
-    "step-by-step transformation",
-    "comparison (weak vs strong response)",
-    "motivational monologue",
-    "question-and-answer reveal",
+    "personal experiment (I tried X for 30 days)",
+    "one counterintuitive lesson from history",
+    "myth vs reality about a famous man",
+    "before vs after mindset shift",
+    "day-in-the-life contrast (average vs disciplined)",
+    "historical story + one modern application",
+    "countdown (worst habit to best habit)",
+    "unpopular opinion with evidence",
+    "character study of a real leader",
+    "if-then consequences of one decision",
+    "challenge or dare to the viewer",
+    "step-by-step transformation blueprint",
+    "comparison (reactive vs proactive response)",
+    "quote-led narrative (start with real quote)",
+    "data-driven insight (specific number or study)",
+]
+
+# Formats that performed well historically on this channel.
+PROVEN_FORMATS = [
+    "personal experiment (I tried X for 30 days)",
+    "historical story + one modern application",
+    "quote-led narrative (start with real quote)",
+    "one counterintuitive lesson from history",
 ]
 
 TARGET_AUDIENCES = [
@@ -229,10 +237,45 @@ def _score_hook(hook: str) -> float:
     return power * 1.5 - weak * 1.0 - length_penalty
 
 
-def _one_idea(force_type: str | None = None) -> Dict[str, str]:
+def _figure_overlap(text: str, banned: List[str]) -> int:
+    lower = _normalize_text(text)
+    return sum(1 for fig in banned if fig in lower)
+
+
+def _pattern_overlap(text: str, banned: List[str]) -> int:
+    lower = _normalize_text(text)
+    return sum(1 for pat in banned if pat in lower)
+
+
+def _pick_format() -> str:
+    if random.random() < 0.45:
+        return random.choice(PROVEN_FORMATS)
+    return random.choice(FORMATS)
+
+
+def _one_idea(
+    force_type: str | None = None,
+    content_signals: dict | None = None,
+) -> Dict[str, str]:
+    content_signals = content_signals or {}
     angle = random.choice(ANGLES)
-    fmt = random.choice(FORMATS)
+    fmt = _pick_format()
     audience = random.choice(TARGET_AUDIENCES)
+
+    avoid_figures = content_signals.get("overused_figures", [])
+    avoid_patterns = content_signals.get("overused_patterns", [])
+    winning_titles = content_signals.get("winning_titles", [])
+
+    avoid_block = ""
+    if avoid_figures:
+        avoid_block += f"\nAVOID these overused figures: {', '.join(avoid_figures)}."
+    if avoid_patterns:
+        avoid_block += f"\nAVOID these overused title patterns: {', '.join(avoid_patterns)}."
+    if winning_titles:
+        avoid_block += (
+            "\nThese titles performed well — match their SPECIFICITY, not their wording: "
+            + "; ".join(winning_titles[:3])
+        )
 
     prompt = (
         "Generate one viral faceless commentary YouTube idea in JSON with keys: "
@@ -242,12 +285,16 @@ def _one_idea(force_type: str | None = None) -> Dict[str, str]:
         "ancient wisdom, famous leaders, relationship dynamics, productivity.\n\n"
         f"ANGLE: {angle}\n"
         f"FORMAT: {fmt}\n"
-        f"TARGET AUDIENCE: {audience}\n\n"
-        "IMPORTANT: Make the topic UNIQUE and SPECIFIC. Avoid generic titles like "
-        "'7 Brutal Truths'. Instead use specific references: a real person, a real "
-        "study, a specific number, a concrete habit. Example: 'Marcus Aurelius Knew "
-        "This at 17' or 'The 5AM Habit That Made Kobe Unstoppable'.\n"
-        "Make the title and hook uniquely match this angle, format, and audience. "
+        f"TARGET AUDIENCE: {audience}\n"
+        f"{avoid_block}\n\n"
+        "CRITICAL RULES:\n"
+        "- Make the topic UNIQUE and SPECIFIC. No generic '7 Brutal Truths' titles.\n"
+        "- Use a real person, a real study, a specific number, or a concrete habit.\n"
+        "- Do NOT reuse cliché formulas like 'The X-Word Phrase', 'The X% Rule', "
+        "'4-Hour Work Window', 'Weak Men vs Strong Men'.\n"
+        "- Vary the opening: story, quote, statistic, confession, or challenge — not always 'The...'.\n"
+        "- Hook must feel fresh — not 'Most men will never...' or 'Nobody tells young men...'.\n"
+        "- Title max 65 chars, punchy and specific.\n"
         "Be provocative but safe for YouTube."
     )
 
@@ -260,7 +307,8 @@ def _one_idea(force_type: str | None = None) -> Dict[str, str]:
             "transformation, or philosophy.\n\n"
             f"TOPIC SEED: {lf_topic}\n"
             f"ANGLE: {angle}\n"
-            f"TARGET AUDIENCE: {audience}\n\n"
+            f"TARGET AUDIENCE: {audience}\n"
+            f"{avoid_block}\n\n"
             "RULES:\n"
             "- Title must be compelling, specific, and include the person's name.\n"
             "- Hook must be a single shocking sentence that stops the viewer.\n"
@@ -284,6 +332,9 @@ def _one_idea(force_type: str | None = None) -> Dict[str, str]:
             "hook": obj.get("hook", random.choice(FALLBACK_HOOKS)).strip(),
             "topic": obj.get("topic", random.choice(FALLBACK_TOPICS)).strip(),
             "video_type": video_type,
+            "angle": angle,
+            "format": fmt,
+            "audience": audience,
         }
     except Exception:
         fallback_type = force_type if force_type in {"short", "normal", "longform"} else "short"
@@ -297,21 +348,40 @@ def _one_idea(force_type: str | None = None) -> Dict[str, str]:
                 topic = random.choice(topics)
         except Exception:
             topic = random.choice(topics)
+        hook = random.choice(FALLBACK_HOOKS)
         return {
-            "title": "7 Brutal Truths Weak Men Avoid",
-            "hook": random.choice(FALLBACK_HOOKS),
+            "title": hook[:65],
+            "hook": hook,
             "topic": topic,
             "video_type": fallback_type,
+            "angle": angle,
+            "format": fmt,
+            "audience": audience,
         }
 
 
 def generate_video_idea(
     force_type: str | None = None,
     recent_titles: list[str] | None = None,
-    candidates: int = 3,
+    candidates: int = 6,
+    content_signals: dict | None = None,
 ) -> Dict[str, str]:
     recent_titles = recent_titles or []
-    pool = [_one_idea(force_type=force_type) for _ in range(max(1, candidates))]
+    if content_signals is None:
+        try:
+            from analytics import get_recent_content_signals
+            content_signals = get_recent_content_signals()
+            recent_titles = list(dict.fromkeys(recent_titles + content_signals.get("recent_titles", [])))
+        except Exception:
+            content_signals = {}
+
+    pool = [
+        _one_idea(force_type=force_type, content_signals=content_signals)
+        for _ in range(max(1, candidates))
+    ]
+
+    overused_figures = content_signals.get("overused_figures", [])
+    overused_patterns = content_signals.get("overused_patterns", [])
 
     best = pool[0]
     best_score = -10_000.0
@@ -319,8 +389,22 @@ def generate_video_idea(
         sim_penalty = 0.0
         for rt in recent_titles:
             sim_penalty = max(sim_penalty, _title_similarity(idea["title"], rt))
+            sim_penalty = max(sim_penalty, _title_similarity(idea["topic"], rt) * 0.7)
 
-        score = _score_hook(idea["hook"]) - sim_penalty * 4.0
+        figure_penalty = _figure_overlap(idea["title"] + " " + idea["topic"], overused_figures) * 2.5
+        pattern_penalty = _pattern_overlap(idea["title"], overused_patterns) * 3.0
+
+        # Penalize generic short titles
+        title_words = len(_normalize_text(idea["title"]).split())
+        generic_penalty = 2.0 if title_words <= 2 else 0.0
+
+        score = (
+            _score_hook(idea["hook"])
+            - sim_penalty * 4.0
+            - figure_penalty
+            - pattern_penalty
+            - generic_penalty
+        )
         if score > best_score:
             best = idea
             best_score = score

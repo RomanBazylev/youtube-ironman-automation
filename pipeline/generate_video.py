@@ -90,7 +90,7 @@ def generate_single_video(force_type: str | None = None, privacy_status: str = "
         idea = generate_video_idea(
             force_type=resolved_video_type,
             recent_titles=recent_titles,
-            candidates=3,
+            candidates=6,
         )
         script_pack = generate_script(idea)
         script_text = script_pack["script"]

@@ -158,6 +158,75 @@ def fetch_and_update_stats() -> None:
     print(f"[ANALYTICS] Updated stats for {updated}/{len(ids_to_fetch)} videos")
 
 
+# ── Diversity helpers ──────────────────────────────────────────────
+
+KNOWN_FIGURES = [
+    "marcus aurelius", "napoleon", "elon musk", "nikola tesla", "jordan peterson",
+    "david goggins", "jocko willink", "nelson mandela", "seneca", "conor mcgregor",
+    "kobe bryant", "arnold schwarzenegger", "mike tyson", "naval ravikant",
+    "viktor frankl", "bruce lee", "einstein", "spartans", "navy seal", "stoic",
+]
+
+TITLE_PATTERN_MARKERS = [
+    "the 3% rule", "the 4-hour work", "4-word phrase", "3-word phrase",
+    "2-word phrase", "weak men", "strong men", "brutal truth", "unstoppable",
+    "morning routine", "journaling habit", "what your father",
+]
+
+
+def _extract_figures(text: str) -> List[str]:
+    lower = text.lower()
+    return [f for f in KNOWN_FIGURES if f in lower]
+
+
+def get_recent_content_signals(limit: int = 20) -> dict:
+    """Return recent titles, topics, overused figures, and winning patterns."""
+    data = _load_log()
+    videos = data.get("videos", [])[-limit:]
+
+    recent_titles = [v.get("title", "") for v in videos if v.get("title")]
+    recent_topics = [v.get("topic", "") for v in videos if v.get("topic")]
+
+    figure_counts: Dict[str, int] = {}
+    pattern_counts: Dict[str, int] = {}
+    for title in recent_titles:
+        for fig in _extract_figures(title):
+            figure_counts[fig] = figure_counts.get(fig, 0) + 1
+        lower = title.lower()
+        for pat in TITLE_PATTERN_MARKERS:
+            if pat in lower:
+                pattern_counts[pat] = pattern_counts.get(pat, 0) + 1
+
+    overused_figures = [f for f, c in figure_counts.items() if c >= 2]
+    overused_patterns = [p for p, c in pattern_counts.items() if c >= 2]
+
+    winners = []
+    for v in data.get("videos", []):
+        stats = v.get("stats") or {}
+        views = stats.get("views")
+        if views is not None and views >= 500:
+            winners.append({
+                "title": v.get("title", ""),
+                "topic": v.get("topic", ""),
+                "views": views,
+            })
+    winners.sort(key=lambda x: x["views"], reverse=True)
+
+    return {
+        "recent_titles": recent_titles,
+        "recent_topics": recent_topics,
+        "overused_figures": overused_figures,
+        "overused_patterns": overused_patterns,
+        "winning_titles": [w["title"] for w in winners[:5]],
+    }
+
+
+def get_recent_hooks(limit: int = 10) -> List[str]:
+    """First sentence from recent video topics — used to avoid repetitive openings."""
+    data = _load_log()
+    return [v.get("topic", "")[:120] for v in data.get("videos", [])[-limit:] if v.get("topic")]
+
+
 # ── Weighted topic selection ───────────────────────────────────────
 
 def get_topic_weights(topics: List[str]) -> Optional[List[float]]:
