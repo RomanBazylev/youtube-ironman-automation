@@ -1,28 +1,6 @@
 {
   "videos": [
     {
-      "video_id": "puktHMAYpkc",
-      "title": "If you feel lost in your 20s, watch this now.",
-      "topic": "the power of fasting",
-      "tags": [
-        "discipline",
-        "mindset",
-        "selfimprovement",
-        "power",
-        "fasting",
-        "motivation",
-        "success",
-        "stoicism"
-      ],
-      "uploaded_at": "2026-08-27T00:33:05.217219+00:00",
-      "stats": {
-        "views": 1,
-        "likes": 0,
-        "comments": 0,
-        "fetched_at": "2026-09-02T23:04:00.396528+00:00"
-      }
-    },
-    {
       "video_id": "p-vxJL7iBiY",
       "title": "This is why you are always tired.",
       "topic": "discipline",
@@ -4495,6 +4473,23 @@
         "stoicism"
       ],
       "uploaded_at": "2026-10-08T10:11:00.605022+00:00",
+      "stats": null
+    },
+    {
+      "video_id": "bdOEf9753c8",
+      "title": "If you feel lost in your 20s, watch this now.",
+      "topic": "investing for beginners",
+      "tags": [
+        "discipline",
+        "mindset",
+        "selfimprovement",
+        "investing",
+        "beginners",
+        "motivation",
+        "masculinity",
+        "mentalstrength"
+      ],
+      "uploaded_at": "2026-10-08T18:36:22.151277+00:00",
       "stats": null
     }
   ]
