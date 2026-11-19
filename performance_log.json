@@ -1,31 +1,6 @@
 {
   "videos": [
     {
-      "video_id": "xEgaupdC8gU",
-      "title": "Your bank account reflects your discipline.",
-      "topic": "ancient Greek ideas about manhood",
-      "tags": [
-        "discipline",
-        "mindset",
-        "selfimprovement",
-        "ancient",
-        "greek",
-        "ideas",
-        "about",
-        "manhood",
-        "stoicism",
-        "mentalstrength",
-        "masculinity"
-      ],
-      "uploaded_at": "2026-09-28T13:12:30.243655+00:00",
-      "stats": {
-        "views": 0,
-        "likes": 0,
-        "comments": 0,
-        "fetched_at": "2026-10-05T04:36:28.941997+00:00"
-      }
-    },
-    {
       "video_id": "w3s2eXby43c",
       "title": "This is why you are always tired.",
       "topic": "How Jim Carrey went from living in a van to $20 million per film",
@@ -4037,7 +4012,7 @@
         "views": 2,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-11-19T11:19:41.601927+00:00"
+        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
       }
     },
     {
@@ -4059,7 +4034,7 @@
         "views": 282,
         "likes": 4,
         "comments": 0,
-        "fetched_at": "2026-11-19T11:19:41.601927+00:00"
+        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
       }
     },
     {
@@ -4081,7 +4056,7 @@
         "views": 63,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-11-19T11:19:41.601927+00:00"
+        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
       }
     },
     {
@@ -4106,7 +4081,7 @@
         "views": 2,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-11-19T11:19:41.601927+00:00"
+        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
       }
     },
     {
@@ -4127,7 +4102,7 @@
         "views": 88,
         "likes": 1,
         "comments": 0,
-        "fetched_at": "2026-11-19T11:19:41.601927+00:00"
+        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
       }
     },
     {
@@ -4149,7 +4124,7 @@
         "views": 419,
         "likes": 7,
         "comments": 0,
-        "fetched_at": "2026-11-19T11:19:41.601927+00:00"
+        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
       }
     },
     {
@@ -4171,7 +4146,7 @@
         "views": 255,
         "likes": 3,
         "comments": 0,
-        "fetched_at": "2026-11-19T11:19:41.601927+00:00"
+        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
       }
     },
     {
@@ -4193,7 +4168,7 @@
         "views": 105,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-11-19T11:19:41.601927+00:00"
+        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
       }
     },
     {
@@ -4215,7 +4190,7 @@
         "views": 55,
         "likes": 1,
         "comments": 0,
-        "fetched_at": "2026-11-19T11:19:41.601927+00:00"
+        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
       }
     },
     {
@@ -4236,7 +4211,7 @@
         "views": 188,
         "likes": 1,
         "comments": 0,
-        "fetched_at": "2026-11-19T11:19:41.601927+00:00"
+        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
       }
     },
     {
@@ -4259,7 +4234,7 @@
         "views": 135,
         "likes": 2,
         "comments": 0,
-        "fetched_at": "2026-11-19T11:19:41.601927+00:00"
+        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
       }
     },
     {
@@ -4281,7 +4256,7 @@
         "views": 12,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-11-19T11:19:41.601927+00:00"
+        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
       }
     },
     {
@@ -4300,10 +4275,10 @@
       ],
       "uploaded_at": "2026-11-16T10:45:59.577439+00:00",
       "stats": {
-        "views": 327,
+        "views": 325,
         "likes": 3,
         "comments": 0,
-        "fetched_at": "2026-11-19T11:19:41.601927+00:00"
+        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
       }
     },
     {
@@ -4322,10 +4297,10 @@
       ],
       "uploaded_at": "2026-11-16T15:21:44.531229+00:00",
       "stats": {
-        "views": 104,
+        "views": 105,
         "likes": 2,
         "comments": 0,
-        "fetched_at": "2026-11-19T11:19:41.601927+00:00"
+        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
       }
     },
     {
@@ -4344,10 +4319,10 @@
       ],
       "uploaded_at": "2026-11-16T21:45:16.933635+00:00",
       "stats": {
-        "views": 62,
+        "views": 60,
         "likes": 2,
         "comments": 0,
-        "fetched_at": "2026-11-19T11:19:41.601927+00:00"
+        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
       }
     },
     {
@@ -4366,10 +4341,10 @@
       ],
       "uploaded_at": "2026-11-17T07:00:32.258360+00:00",
       "stats": {
-        "views": 47,
+        "views": 48,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-11-19T11:19:41.601927+00:00"
+        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
       }
     },
     {
@@ -4387,10 +4362,10 @@
       ],
       "uploaded_at": "2026-11-17T18:16:09.333571+00:00",
       "stats": {
-        "views": 62,
+        "views": 63,
         "likes": 1,
         "comments": 0,
-        "fetched_at": "2026-11-19T11:19:41.601927+00:00"
+        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
       }
     },
     {
@@ -4409,10 +4384,10 @@
       ],
       "uploaded_at": "2026-11-18T11:26:27.188864+00:00",
       "stats": {
-        "views": 110,
+        "views": 125,
         "likes": 2,
         "comments": 0,
-        "fetched_at": "2026-11-19T11:19:41.601927+00:00"
+        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
       }
     },
     {
@@ -4436,7 +4411,7 @@
         "views": 0,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-11-19T11:19:41.601927+00:00"
+        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
       }
     },
     {
@@ -4456,10 +4431,10 @@
       ],
       "uploaded_at": "2026-11-18T20:07:41.244135+00:00",
       "stats": {
-        "views": 20,
+        "views": 21,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-11-19T11:19:41.601927+00:00"
+        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
       }
     },
     {
@@ -4479,10 +4454,10 @@
       ],
       "uploaded_at": "2026-11-19T02:21:05.182479+00:00",
       "stats": {
-        "views": 1,
+        "views": 6,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-11-19T11:19:41.601927+00:00"
+        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
       }
     },
     {
@@ -4501,6 +4476,28 @@
         "success"
       ],
       "uploaded_at": "2026-11-19T11:21:01.293026+00:00",
+      "stats": {
+        "views": 43,
+        "likes": 0,
+        "comments": 0,
+        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
+      }
+    },
+    {
+      "video_id": "ibM5FgbcDo4",
+      "title": "Weak men ignore this until it destroys them.",
+      "topic": "the danger of comparison",
+      "tags": [
+        "discipline",
+        "mindset",
+        "selfimprovement",
+        "danger",
+        "comparison",
+        "mentalstrength",
+        "motivation",
+        "success"
+      ],
+      "uploaded_at": "2026-11-19T20:07:42.431805+00:00",
       "stats": null
     }
   ]
