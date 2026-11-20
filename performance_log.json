@@ -1,29 +1,6 @@
 {
   "videos": [
     {
-      "video_id": "w3s2eXby43c",
-      "title": "This is why you are always tired.",
-      "topic": "How Jim Carrey went from living in a van to $20 million per film",
-      "tags": [
-        "discipline",
-        "mindset",
-        "selfimprovement",
-        "carrey",
-        "living",
-        "million",
-        "motivation",
-        "mentalstrength",
-        "success"
-      ],
-      "uploaded_at": "2026-09-28T13:26:53.308568+00:00",
-      "stats": {
-        "views": 1,
-        "likes": 0,
-        "comments": 0,
-        "fetched_at": "2026-10-05T04:36:28.941997+00:00"
-      }
-    },
-    {
       "video_id": "Dd1MLkJ81Hk",
       "title": "Loneliness is not the problem. Weakness is.",
       "topic": "how David Goggins transformed himself",
@@ -4034,7 +4011,7 @@
         "views": 282,
         "likes": 4,
         "comments": 0,
-        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
+        "fetched_at": "2026-11-20T02:03:16.197893+00:00"
       }
     },
     {
@@ -4056,7 +4033,7 @@
         "views": 63,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
+        "fetched_at": "2026-11-20T02:03:16.197893+00:00"
       }
     },
     {
@@ -4081,7 +4058,7 @@
         "views": 2,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
+        "fetched_at": "2026-11-20T02:03:16.197893+00:00"
       }
     },
     {
@@ -4102,7 +4079,7 @@
         "views": 88,
         "likes": 1,
         "comments": 0,
-        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
+        "fetched_at": "2026-11-20T02:03:16.197893+00:00"
       }
     },
     {
@@ -4124,7 +4101,7 @@
         "views": 419,
         "likes": 7,
         "comments": 0,
-        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
+        "fetched_at": "2026-11-20T02:03:16.197893+00:00"
       }
     },
     {
@@ -4146,7 +4123,7 @@
         "views": 255,
         "likes": 3,
         "comments": 0,
-        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
+        "fetched_at": "2026-11-20T02:03:16.197893+00:00"
       }
     },
     {
@@ -4168,7 +4145,7 @@
         "views": 105,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
+        "fetched_at": "2026-11-20T02:03:16.197893+00:00"
       }
     },
     {
@@ -4190,7 +4167,7 @@
         "views": 55,
         "likes": 1,
         "comments": 0,
-        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
+        "fetched_at": "2026-11-20T02:03:16.197893+00:00"
       }
     },
     {
@@ -4211,7 +4188,7 @@
         "views": 188,
         "likes": 1,
         "comments": 0,
-        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
+        "fetched_at": "2026-11-20T02:03:16.197893+00:00"
       }
     },
     {
@@ -4234,7 +4211,7 @@
         "views": 135,
         "likes": 2,
         "comments": 0,
-        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
+        "fetched_at": "2026-11-20T02:03:16.197893+00:00"
       }
     },
     {
@@ -4253,10 +4230,10 @@
       ],
       "uploaded_at": "2026-11-16T00:51:32.809792+00:00",
       "stats": {
-        "views": 12,
+        "views": 14,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
+        "fetched_at": "2026-11-20T02:03:16.197893+00:00"
       }
     },
     {
@@ -4275,10 +4252,10 @@
       ],
       "uploaded_at": "2026-11-16T10:45:59.577439+00:00",
       "stats": {
-        "views": 325,
+        "views": 322,
         "likes": 3,
         "comments": 0,
-        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
+        "fetched_at": "2026-11-20T02:03:16.197893+00:00"
       }
     },
     {
@@ -4297,10 +4274,10 @@
       ],
       "uploaded_at": "2026-11-16T15:21:44.531229+00:00",
       "stats": {
-        "views": 105,
+        "views": 107,
         "likes": 2,
         "comments": 0,
-        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
+        "fetched_at": "2026-11-20T02:03:16.197893+00:00"
       }
     },
     {
@@ -4322,7 +4299,7 @@
         "views": 60,
         "likes": 2,
         "comments": 0,
-        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
+        "fetched_at": "2026-11-20T02:03:16.197893+00:00"
       }
     },
     {
@@ -4341,10 +4318,10 @@
       ],
       "uploaded_at": "2026-11-17T07:00:32.258360+00:00",
       "stats": {
-        "views": 48,
+        "views": 49,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
+        "fetched_at": "2026-11-20T02:03:16.197893+00:00"
       }
     },
     {
@@ -4365,7 +4342,7 @@
         "views": 63,
         "likes": 1,
         "comments": 0,
-        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
+        "fetched_at": "2026-11-20T02:03:16.197893+00:00"
       }
     },
     {
@@ -4387,7 +4364,7 @@
         "views": 125,
         "likes": 2,
         "comments": 0,
-        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
+        "fetched_at": "2026-11-20T02:03:16.197893+00:00"
       }
     },
     {
@@ -4411,7 +4388,7 @@
         "views": 0,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
+        "fetched_at": "2026-11-20T02:03:16.197893+00:00"
       }
     },
     {
@@ -4431,10 +4408,10 @@
       ],
       "uploaded_at": "2026-11-18T20:07:41.244135+00:00",
       "stats": {
-        "views": 21,
+        "views": 27,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
+        "fetched_at": "2026-11-20T02:03:16.197893+00:00"
       }
     },
     {
@@ -4457,7 +4434,7 @@
         "views": 6,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
+        "fetched_at": "2026-11-20T02:03:16.197893+00:00"
       }
     },
     {
@@ -4477,10 +4454,10 @@
       ],
       "uploaded_at": "2026-11-19T11:21:01.293026+00:00",
       "stats": {
-        "views": 43,
+        "views": 52,
         "likes": 0,
         "comments": 0,
-        "fetched_at": "2026-11-19T20:06:15.312295+00:00"
+        "fetched_at": "2026-11-20T02:03:16.197893+00:00"
       }
     },
     {
@@ -4498,6 +4475,28 @@
         "success"
       ],
       "uploaded_at": "2026-11-19T20:07:42.431805+00:00",
+      "stats": {
+        "views": 0,
+        "likes": 0,
+        "comments": 0,
+        "fetched_at": "2026-11-20T02:03:16.197893+00:00"
+      }
+    },
+    {
+      "video_id": "8Jvj6EzFXp8",
+      "title": "The truth about discipline nobody wants to hear.",
+      "topic": "Sun Tzu's Art of War for daily life",
+      "tags": [
+        "discipline",
+        "mindset",
+        "selfimprovement",
+        "tzu's",
+        "daily",
+        "stoicism",
+        "success",
+        "motivation"
+      ],
+      "uploaded_at": "2026-11-20T02:04:50.686601+00:00",
       "stats": null
     }
   ]
